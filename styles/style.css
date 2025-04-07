@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+body {
+    font-family: "Readex Pro", Helvetica, sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 350;
+    font-style: normal;
+    font-variation-settings:
+      "HEXP" 0;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin: 0;
+}
+
+p {
+    font-size: 12px;
+    text-align: center;
+}
+
+img {
+    width: auto;
+    height: 100px;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+}
