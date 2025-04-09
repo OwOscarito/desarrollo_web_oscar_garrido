@@ -45,23 +45,25 @@
         <label for="phone">Telefono</label><br>
         <input type="tel" name="phone" id="phone" minlength="10" maxlength="10"><br>
 
-        <label for="contact">Contacto</label><br>
-        <div class >
-        <input type="checkbox" name="whatsapp" onclick="updateInput(this);">
-        Whatsapp
-        <input id="whatsapp" type="text" name="whatsapp-id" style="display: none">
-        <br>
-        <input type="checkbox" name="instagram" onclick="updateInput(this);">
-        Instagram
+        <label>Contacto</label><br>
+
+
+        <input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
+        <input id="whatsapp" type="text" name="whatsapp-id" style="display: none"><br>
+        
+        <input type="checkbox" name="instagram" onclick="updateInput(this);">Instagram
         <input id="instagram" type="text" name="instagram-id" style="display: none"><br>
 
         <input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
         <input id="telegram" type="text" name="telegram-id" style="display: none"><br>
+        
+        <input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
+        <input id="tiktok" type="text" name="tiktok" style="display: none"><br>
 
         <input type="checkbox" name="x" onclick="updateInput(this);"> X
         <input id="x" type="text" name="x-id" style="display: none"><br>
 
-        <input type="checkbox" name="other" onclick="updateInput(this);"> Otra
+        <input type="checkbox" name="other" onclick="updateInput(this);">Otra
         <input id="other" type="text" name="other" style="display: none"><br>
       </div>
       <div class="block">
@@ -72,14 +74,14 @@
         <input type="checkbox" name="end-datetime" onclick="updateInput(this);">Fecha y Hora de Termino<br>
         <input type="datetime-local" name="end-datetime" id="end-datetime" style="display: none"><br>
 
-        <label for="title">Tema</label><br>
+        <label for="select-topic">Tema</label><br>
         <select name="select-topic" id="select-topic" required>
           <option value="">Seleccione una tema</option>
         </select><br>
         <input id="other-topic" type="text" name="other-topic" style="display: none"><br>
 
         <label for="description">Descripcion</label><br>
-        <textarea name="description" id="description" rows="10" cols="50" maxlength="5000"></textarea><br>
+        <textarea name="description" id="description" rows="10" cols="50" maxlength="500"></textarea><br>
 
         <label for="photo">Fotos</label>
         <span id="picture-container">*Sube 1 a 5 fotos de la actividad</span><br>
