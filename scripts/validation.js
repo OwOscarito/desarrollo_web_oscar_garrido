@@ -64,7 +64,7 @@ const validateWho = () => {
   };
 
   const validateContact = (contact) => {
-    return validateLenght(contact, 4, 50);
+    return validateLength(contact, 0, 0) && validateLenght(contact, 4, 50);
   };
 
   const name = document.getElementById("name").value;
