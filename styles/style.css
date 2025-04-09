@@ -1,39 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap");
 
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  background-color: #339989;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+.btn:hover {
+  background-color: #7de2d1;
 }
 
 body {
-    font-family: "Readex Pro", Helvetica, sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 350;
-    font-style: normal;
-    font-variation-settings:
-      "HEXP" 0;
-}
-
-h1 {
-    font-size: 2.5em;
-    text-align: center;
-    margin: 0;
-}
-
-p {
-    font-size: 12px;
-    text-align: center;
+  font-family: "Readex Pro", Helvetica, sans-serif;
+  font-weight: 350;
+  font-style: normal;
+  font-variation-settings: "HEXP" 0;
 }
 
 img {
-    width: auto;
-    height: 100px;
+  width: auto;
+  height: 100px;
 }
 
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding: 10px;
+table,
+th,
+td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+
+.main-container {
+  width: 95%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  margin: 5px 0;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  width: 98%;
+  margin: 1%;
+}
+
+.half-block {
+  display: flex;
+  flex-direction: column;
+  width: 48%;
+  margin: 1%;
 }
