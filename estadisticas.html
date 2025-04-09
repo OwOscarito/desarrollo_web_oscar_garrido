@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Actividades</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <div class="row center">
+    <h1>Portal de Actividades</h1>
+  </div>
+  <div class="row center">
+    <h2>Estadisticas</h2>
+  </div>
+  <div class="main-container">
+    <div class="row">
+      <div class="half-block center">
+        <h3>Actividades por Dia de la Semana</h3>
+        <canvas id="weekday-chart"></canvas>
+      </div>
+      <div class="half-block center">
+        <h3>Horario Actividades por Mes</h3>
+        <canvas id="time-chart"></canvas>
+      </div>
+    </div>
+    <div class="row center">
+      <div class="half-block center">
+        <h3>Actividades por Tipo</h3>
+        <canvas id="activity-chart"></canvas>
+      </div>
+    </div>
+    <div class="row">
+      <a class="btn" href="index.html">Volver</a>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="scripts/stats.js"></script>
+</body>
+
+</html>
