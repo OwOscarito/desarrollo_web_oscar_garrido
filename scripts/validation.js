@@ -158,8 +158,15 @@ const validateWhat = () => {
     }
   }
 
-
-
+  if (!validateDescription(description)) {
+    alert("Ingrese una descripción válida.");
+    return false;
+  }
+  if (!validateTopic(topic, otherTopic)) {
+    alert("Seleccione un tema válido.");
+    return false;
+  }
+  return true;
 };
 
 const validateForm = () => {
