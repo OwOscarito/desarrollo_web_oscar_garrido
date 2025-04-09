@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Actividades</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <div class="row center">
+    <h1>Portal de Actividades</h1>
+  </div>
+  <div class="row center">
+    <h2>Agregar Actividad</h2>
+  </div>
+  <div class="main-container">
+    <form name="activity-form" method="post" enctype="multipart/form-data">
+
+      <div class="block">
+        <h3>¿Donde?</h3><br>
+        <label for="select-region">Region:</label><br>
+        <select name="select-region" id="select-region" required>
+          <option value="">Seleccione una region</option>
+        </select><br>
+
+        <label for="select-commune">Comuna:</label><br>
+        <select name="select-commune" id="select-commune" required>
+          <option value="">Seleccione una comuna</option>
+        </select> <br>
+
+        <label for="sector">Sector:</label><br>
+        <input type="text" name="sector" id="sector" maxlength="100" required><br>
+      </div>
+
+      <div class="block">
+        <h3>¿Quien Organiza?</h3>
+        <label for="name">Nombre</label><br>
+        <input type="text" name="name" id="name" maxlength="200" required><br>
+
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email" maxlength="100" required><br>
+
+        <label for="phone">Telefono</label><br>
+        <input type="tel" name="phone" id="phone" minlength="10" maxlength="10"><br>
+
+        <label for="contact">Contacto</label><br>
+        <div class >
+        <input type="checkbox" name="whatsapp" onclick="updateInput(this);">
+        Whatsapp
+        <input id="whatsapp" type="text" name="whatsapp-id" style="display: none">
+        <br>
+        <input type="checkbox" name="instagram" onclick="updateInput(this);">
+        Instagram
+        <input id="instagram" type="text" name="instagram-id" style="display: none"><br>
+
+        <input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
+        <input id="telegram" type="text" name="telegram-id" style="display: none"><br>
+
+        <input type="checkbox" name="x" onclick="updateInput(this);"> X
+        <input id="x" type="text" name="x-id" style="display: none"><br>
+
+        <input type="checkbox" name="other" onclick="updateInput(this);"> Otra
+        <input id="other" type="text" name="other" style="display: none"><br>
+      </div>
+      <div class="block">
+        <h3>¿Cuando y de que se trata?</h3>
+        <label for="start-datetime">Fecha y Hora de Inicio</label><br>
+        <input type="datetime-local" name="start-datetime" id="start-datetime" required><br>
+
+        <input type="checkbox" name="end-datetime" onclick="updateInput(this);">Fecha y Hora de Termino<br>
+        <input type="datetime-local" name="end-datetime" id="end-datetime" style="display: none"><br>
+
+        <label for="title">Tema</label><br>
+        <select name="select-topic" id="select-topic" required>
+          <option value="">Seleccione una tema</option>
+        </select><br>
+        <input id="other-topic" type="text" name="other-topic" style="display: none"><br>
+
+        <label for="description">Descripcion</label><br>
+        <textarea name="description" id="description" rows="10" cols="50" maxlength="5000"></textarea><br>
+
+        <label for="photo">Fotos</label>
+        <span id="picture-container">*Sube 1 a 5 fotos de la actividad</span><br>
+        <input type="file" name="photo" id="photo" accept="image/*" required><br>
+      </div>
+      <div class="row center">
+        <a class="btn">Crear Actividad</a>
+      </div>
+      <div class="row center">
+        <a class="btn" href="index.html">Volver</a>
+      </div>
+    </form>
+  </div>
+  <script src="scripts/region_comuna.js"></script>
+  <script src="scripts/topics.js"></script>
+  <script src="scripts/activityForm.js"></script>
+  <script src="scripts/optInput.js"></script>
+  <script src="scripts/validation.js"></script>
+</body>
+
+</html>
