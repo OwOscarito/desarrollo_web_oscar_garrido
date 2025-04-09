@@ -64,7 +64,7 @@ const validateWho = () => {
   };
 
   const validateContact = (contact) => {
-    return validateLength(contact, 0, 0) && validateLenght(contact, 4, 50);
+    return validateLenght(contact, 0, 0) || validateLenght(contact, 4, 50);
   };
 
   const name = document.getElementById("name").value;
@@ -124,20 +124,27 @@ const validateWhen = () => {
   const validateDate = (date) => {
     // Regex for validating date in YYYY-MM-DD hh:mmformat
     const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
-    return validateLenght(date, 10) && dateRegex.test(date);
+    return dateRegex.test(date);
   };
 
   const validateEndDate = (startDate, endDate) => {
+    if (!validateDate(endDate)) {
+      return false;
+    }
     const start = new Date(startDate);
     const end = new Date(endDate);
     return end > start;
   }
 
+  const startDate = document.getElementById("start-datetime").value;
+  const endCheckbox = document.getElementById("end-checkbox").value;
+  const endDate = document.getElementById("end-datetime").value;
+
   if (!validateDate(startDate)) {
     alert("Ingrese una fecha de inicio válida.");
     return false;
   }
-  if (!validateDate(endDate)) {
+  if (!validateEndDate(startDate, endDate) && endCheckbox) {
     alert("Ingrese una fecha de término válida.");
     return false;
   }
@@ -147,16 +154,20 @@ const validateWhen = () => {
 const validateWhat = () => {
 
   const validateDescription = (description) => {
-    return validateLenght(description, 500);
+    return validateLenght(description, 0, 500);
   }
 
   const validateTopic = (topic, otherTopic) => {
     if (topic == "Otro") {
-      return validateLenght(otherTopic, 200) ;
+      return validateLenght(otherTopic, 3, 15) ;
     } else {
       return topics.includes(topic);
     }
   }
+
+  const description = document.getElementById("description").value;
+  const topic = document.getElementById("select-topic").value;
+  const otherTopic = document.getElementById("other-topic").value;
 
   if (!validateDescription(description)) {
     alert("Ingrese una descripción válida.");

@@ -59,6 +59,12 @@ const updateOtherTopic = () => {
   }
 };
 
+const validateAndSubmit = () => {
+  if (validateForm()) {
+    window.location.href = "index.html";
+  }
+}
+
 document
   .getElementById("select-region")
   .addEventListener("change", updateCommunes);
@@ -66,6 +72,11 @@ document
 document
   .getElementById("select-topic")
   .addEventListener("change", updateOtherTopic);
+
+document
+  .getElementById("submit-btn")
+  .addEventListener("click", validateAndSubmit);
+
 
 window.onload = () => {
   populateRegions();

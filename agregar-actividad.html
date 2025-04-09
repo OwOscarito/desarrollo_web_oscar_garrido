@@ -71,14 +71,14 @@
         <label for="start-datetime">Fecha y Hora de Inicio</label><br>
         <input type="datetime-local" name="start-datetime" id="start-datetime" required><br>
 
-        <input type="checkbox" name="end-datetime" onclick="updateInput(this);">Fecha y Hora de Termino<br>
+        <input type="checkbox" name="end-datetime" id="end-checkbox" onclick="updateInput(this);">Fecha y Hora de Termino<br>
         <input type="datetime-local" name="end-datetime" id="end-datetime" style="display: none"><br>
 
         <label for="select-topic">Tema</label><br>
         <select name="select-topic" id="select-topic" required>
           <option value="">Seleccione una tema</option>
         </select><br>
-        <input id="other-topic" type="text" name="other-topic" style="display: none"><br>
+        <input id="other-topic" type="text" name="other-topic" maxlength="15" style="display: none"><br>
 
         <label for="description">Descripcion</label><br>
         <textarea name="description" id="description" rows="10" cols="50" maxlength="500"></textarea><br>
@@ -88,7 +88,7 @@
         <input type="file" name="photo" id="photo" accept="image/*" required><br>
       </div>
       <div class="row center">
-        <a class="btn" onclick="validateForm()">Crear Actividad</a>
+        <a class="btn" id="submit-btn">Crear Actividad</a>
       </div>
       <div class="row center">
         <a class="btn" href="index.html">Volver</a>
