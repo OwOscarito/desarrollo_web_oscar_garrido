@@ -1,18 +1,23 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
 <html lang="es">
 
 <head>
-  <title>SocialFind</title>
-  <link rel="stylesheet" href="styles/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="View activities page">
+  <title>Portal de Actividades</title>
+  <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
-  <div class="center">
-    <h1>SocialFind</h1>
+  <div class="row center">
+    <h1>Portal de Actividades</h1>
   </div>
-  <div class="center">
-    <table>
+  <div class="row center">
+    <h2>Ultimas 5 Actividades</h2>
+  </div>
+  <div class="row center">
+    <table id="activity-table">
       <tr>
         <th>Inicio</th>
         <th>Termino</th>
@@ -22,29 +27,52 @@
         <th>Foto</th>
       </tr>
       <tr>
-        <td>2025-03-28<br />12:00</td>
-        <td>2025-03-28<br />14:00</td>
+        <td>2025-03-28<br>12:00</td>
+        <td>2025-03-28<br>14:00</td>
         <td>Santiago</td>
-        <td>Centro</td>
+        <td>Beauchef 850, Sala N11</td>
         <td>Celebracion Fecha de Salida Silksong</td>
-        <td><img src="images/activity0.webp"/></td>
+        <td><img class="center" src="images/activity0.webp" alt="Imagen"></td>
       </tr>
       <tr>
-        <td>2025-03-28<br />12:00</td>
-        <td>2025-03-28<br />14:00</td>
+        <td>2025-03-28<br>12:00</td>
+        <td>2025-03-28<br>14:00</td>
         <td>Santiago</td>
-        <td>Centro</td>
-        <td>Ritual Mensual de Silksong</td>
-        <td><img src="images/activity0.webp"/></td>
+        <td>Beauchef 851, Salita DCC</td>
+        <td>Torneo de Smash</td>
+        <td><img class="center" src="images/activity1.webp" alt="Imagen"></td>
+      </tr>
+      <tr>
+        <td>2025-03-28<br>12:00</td>
+        <td>2025-03-28<br>14:00</td>
+        <td>Santiago</td>
+        <td>Parque O'Higgins</td>
+        <td>Adoracion de Gatos</td>
+        <td><img class="center" src="images/activity2.jpg " alt="Imagen"></td>
+      </tr>
+      <tr>
+        <td>2025-03-28<br>12:00</td>
+        <td>2025-03-28<br>14:00</td>
+        <td>Santiago</td>
+        <td>Parque O'Higgins</td>
+        <td>Concurso Imitadores de Chayanne</td>
+        <td><img class="center-content" src="images/activity3.jpg " alt="Imagen"></td>
+      </tr>
+      <tr>
+        <td>2025-03-28<br>12:00</td>
+        <td>2025-03-28<br>14:00</td>
+        <td>Santiago</td>
+        <td>Parque O'Higgins</td>
+        <td>Concurso Imitadores de Chayanne</td>
+        <td class="center-content"><img class="center" src="images/activity4.webp " alt="Imagen"></td>
       </tr>
     </table>
   </div>
-  <div class="center">
-    <button href="" id="create-activity">Crear Actividad</button>
-    <button id="view-activities">Ver Actividades</button>
-    <button id="view-stats">Estadisticas</button>
-  <div id="activities"></div>
-  <script src="activities.js"></script>
+  <div class="row center">
+    <a class="btn" href="agregar-actividad.html">Crear Actividad</a>
+    <a class="btn" href="listado-actividades.html">Ver Actividades</a>
+    <a class="btn" href="estadisticas.html" id="view-stats">Estadisticas</a>
+  </div>
 </body>
 
 </html>
