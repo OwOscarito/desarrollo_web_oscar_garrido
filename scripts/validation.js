@@ -60,7 +60,7 @@ const validateWho = () => {
 
   const validatePhoneNumber = (number) => {
     const phoneRegex = /^\+\d{3}\.\d{8}$/;
-    return (validateLenght(number, 14, 14) && phoneRegex.test(number));
+    return phoneRegex.test(number);
   };
 
   const validateContact = (contact) => {
