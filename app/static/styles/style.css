@@ -1,17 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Readex+Pro&display=swap");
 
-.center {
-  justify-content: center;
-  align-items: center;
-}
-
-.center-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .btn {
   background-color: #339989;
   border: none;
@@ -48,11 +36,19 @@ td {
   padding: 10px;
 }
 
+.main-container {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 5px 5px;
+  max-width: 1200px;
+  font-family: "Roboto", sans-serif;
+  align-items: center;
+}
+
 
 .main-container {
   width: 95%;
   max-width: 1200px;
-  margin: auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
