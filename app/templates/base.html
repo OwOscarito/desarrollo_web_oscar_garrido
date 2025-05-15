@@ -8,18 +8,31 @@
   {% block css %}{% endblock %}
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
   <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/catppuccin.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/custom.css') }}" />
 </head>
 
 <body>
-  <div class="navbar">
+  <header>
     <h1>Portal de Actividades</h1>
-    <a class="navbar-page" href="{{ url_for('index') }}">Home</a>
-  </div>
-  <div class="main-container">
-    {% block content %}{% endblock %} {% block javascript %}{% endblock %}
-  </div>
+    <nav>
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('agregar') }}">Crear Actividad</a>
+      <a href="{{ url_for('listado') }}">Ver Actividades</a>
+      <a href="{{ url_for('estadisticas') }}">Estadisticas</a>
+    </nav>
+  </header>
+  <main>
+    {% block main %}
+    {% endblock %}
+  </main>
+  {% block javascript %}
+  {% endblock %}
 </body>
 
 </html>

@@ -1,0 +1,47 @@
+:root {
+  /* Set sans-serif & mono fonts */
+  --sans-font: "Readex Pro", Helvetica, Arial, sans-serif;
+  --mono-font: "Fira Code", Consolas, monospace;
+  --standard-border-radius: 5px;
+  --border-width: 1px;
+
+  /* Default (light) theme */
+  --bg: var(--ctp-latte-base);
+  --accent-bg: var(--ctp-latte-crust);
+
+  --text: var(--ctp-latte-text);
+  --text-light: var(--ctp-latte-subtext1);
+
+  --border: var(--ctp-latte-subtext0);
+  --accent: var(--ctp-latte-teal);
+  --accent-hover: var(--ctp-mocha-teal);
+  --accent-text: var(--bg);
+
+  --code: var(--ctp-latte-red);
+  --preformatted: var(--ctp-mocha-base);
+
+  --marked: var(--ctp-latte-yellow);
+  --disabled: var(--ctp-latte-mantle);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+    --bg: var(--ctp-latte-base);
+    --accent-bg: var(--ctp-latte-crust);
+
+    --text: var(--ctp-latte-text);
+    --text-light: var(--ctp-latte-subtext1);
+
+    --border: var(--ctp-latte-subtext0);
+    --accent: var(--ctp-latte-teal);
+    --accent-hover: var(--ctp-mocha-teal);
+    --accent-text: var(--bg);
+
+    --code: var(--ctp-latte-red);
+    --preformatted: var(--ctp-mocha-base);
+
+    --marked: var(--ctp-latte-yellow);
+    --disabled: var(--ctp-latte-mantle);
+  }
+}

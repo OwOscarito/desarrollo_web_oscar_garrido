@@ -1,0 +1,61 @@
+:root {
+  /* CATPPUCCIN PALETE */
+  --ctp-latte-rosewater: #dc8a78;
+  --ctp-latte-flamingo: #dd7878;
+  --ctp-latte-pink: #ea76cb;
+  --ctp-latte-mauve: #8839ef;
+  --ctp-latte-red: #d20f39;
+  --ctp-latte-maroon: #e64553;
+  --ctp-latte-peach: #fe640b;
+  --ctp-latte-yellow: #df8e1d;
+  --ctp-latte-green: #40a02b;
+  --ctp-latte-teal: #179299;
+  --ctp-latte-sky: #04a5e5;
+  --ctp-latte-sapphire: #209fb5;
+  --ctp-latte-blue: #1e66f5;
+  --ctp-latte-lavender: #7287fd;
+
+  --ctp-mocha-rosewater: #f2d5cf;
+  --ctp-mocha-flamingo: #eebebe;
+  --ctp-mocha-pink: #f4b8e4;
+  --ctp-mocha-mauve: #ca9ee6;
+  --ctp-mocha-red: #e78284;
+  --ctp-mocha-maroon: #ea999c;
+  --ctp-mocha-peach: #ef9f76;
+  --ctp-mocha-yellow: #e5c890;
+  --ctp-mocha-green: #a6d189;
+  --ctp-mocha-teal: #81c8be;
+  --ctp-mocha-sky: #99d1db;
+  --ctp-mocha-sapphire: #85c1dc;
+  --ctp-mocha-blue: #8caaee;
+  --ctp-mocha-lavender: #babbf1;
+
+  --ctp-latte-text: #4c4f69;
+  --ctp-mocha-text: #c6d0f5;
+
+  --ctp-latte-subtext1: #5c5f77;
+  --ctp-latte-subtext0: #6c6f85;
+  --ctp-mocha-subtext1: #b5bfe2;
+  --ctp-mocha-subtext0: #a5adce;
+
+  --ctp-latte-overlay2: #7c7f93;
+  --ctp-latte-overlay1: #8c8fa1;
+  --ctp-latte-overlay0: #9ca0b0;
+  --ctp-latte-surface2: #acb0be;
+  --ctp-latte-surface1: #bcc0cc;
+  --ctp-latte-surface0: #ccd0da;
+
+  --ctp-mocha-overlay2: #949cbb;
+  --ctp-mocha-overlay1: #838ba7;
+  --ctp-mocha-overlay0: #737994;
+  --ctp-mocha-surface2: #626880;
+  --ctp-mocha-surface1: #51576d;
+  --ctp-mocha-surface0: #414559;
+
+  --ctp-latte-base: #eff1f5;
+  --ctp-latte-mantle: #e6e9ef;
+  --ctp-latte-crust: #dce0e8;
+  --ctp-mocha-base: #303446;
+  --ctp-mocha-mantle: #292c3c;
+  --ctp-mocha-crust: #232634;
+}
