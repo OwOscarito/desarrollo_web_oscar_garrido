@@ -21,7 +21,7 @@
   <input type="text" name="sector" id="sector" maxlength="100" required>
 
 
-
+  <section>
   <h3>¿Quien Organiza?</h3>
   <label for="name">Nombre</label>
   <input type="text" name="name" id="name" maxlength="200" required>
@@ -32,28 +32,28 @@
   <label for="phone">Telefono</label>
   <input type="tel" name="phone" id="phone" minlength="14" maxlength="14">
 
-  <label>Contacto</label>
+  <label for="contactos">Contacto</label>
+  <ul name="contactos">
+    <li><input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
+    <input id="whatsapp" type="text" name="whatsapp-id" style="display: none"></li>
 
+    <li><input type="checkbox" name="instagram" onclick="updateInput(this);">Instagram
+    <input id="instagram" type="text" name="instagram-id" style="display: none"></li>
 
-  <input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
-  <input id="whatsapp" type="text" name="whatsapp-id" style="display: none">
+    <li><input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
+    <input id="telegram" type="text" name="telegram-id" style="display: none"></li>
 
-  <input type="checkbox" name="instagram" onclick="updateInput(this);">Instagram
-  <input id="instagram" type="text" name="instagram-id" style="display: none">
+    <li><input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
+    <input id="tiktok" type="text" name="tiktok" style="display: none"></li>
 
-  <input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
-  <input id="telegram" type="text" name="telegram-id" style="display: none">
+    <li><input type="checkbox" name="x" onclick="updateInput(this);">X
+    <input id="x" type="text" name="x-id" style="display: none"></li>
 
-  <input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
-  <input id="tiktok" type="text" name="tiktok" style="display: none">
-
-  <input type="checkbox" name="x" onclick="updateInput(this);">X
-  <input id="x" type="text" name="x-id" style="display: none">
-
-  <input type="checkbox" name="other" onclick="updateInput(this);">Otra
-  <input id="other" type="text" name="other" style="display: none">
-
-
+    <li><input type="checkbox" name="other" onclick="updateInput(this);">Otra
+    <input id="other" type="text" name="other" style="display: none"></li>
+  </ul>
+  </section>
+  <section>
   <h3>¿Cuando y de que se trata?</h3>
   <label for="start-datetime">Fecha y Hora de Inicio</label>
   <input type="datetime-local" name="start-datetime" id="start-datetime" required>
@@ -74,11 +74,11 @@
   <label for="photo">Fotos</label>
   <span id="picture-container">*Sube 1 a 5 fotos de la actividad</span>
   <input type="file" name="photo" id="photo" accept="image/*" required>
-
+  
 
   <a class="button" id="submit-btn">Crear Actividad</a>
 
-  <a class="button" href="{{ url_for('index') }}">Volver</a>
+  <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
 </form>
 
 {% endblock %}
