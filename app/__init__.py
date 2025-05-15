@@ -7,7 +7,7 @@ UPLOAD_FOLDER = 'static/uploads'
 
 app = Flask(__name__)
 
-app.secret_key = "s3cr3t_k3y"
+app.secret_key = "m3g4_s3cr3t_k3y"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
 
@@ -23,8 +23,23 @@ def estadisticas():
 def agregar():
     if request.method == "POST":
         req = request.form
-        error = ""
-        render_template('agregar-actividad.html', error=error)
+        error_list = []
+
+        # Donde
+        if not validate.valid_location(req.get('region'), req.get('com')):
+            error_list.append("Ubicación inválida")
+        if not validate.valid_sector(req.get('sector')):
+            error_list.append("Sector inválido")
+
+        # Quien
+        if not validate.valid_name(req.get('name')):
+            error_list.append("Nombre inválido")
+        if not validate.valid_email(req.get('email')):
+            error_list.append("Email inválido")
+            
+        if error_list:
+            error = ", ".join(error_list)
+            render_template('agregar-actividad.html', error=error)
         return redirect(url_for('index'))
                         
     if request.method == "GET":

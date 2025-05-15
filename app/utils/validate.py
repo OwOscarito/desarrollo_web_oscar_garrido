@@ -2,38 +2,47 @@ import re
 import filetype
 
 # Generic string validator
-def validate_string(string, min_length=0, max_length=100):
+def valid_string(string, min_length=0, max_length=100):
     if min_length <= len(string) <= max_length:
         return True
     return False
 
 # Where
-def validate_location(region, com):
+def valid_location(region, com):
     if not region or not com:
         return False
-    
-    return 
 
-def validate_sector(sector):
-    return validate_string(sector, 0, 100)
+    return True
 
-def validate_name(name):
+def valid_sector(sector):
+    return valid_string(sector, 0, 100)
+
+# Who
+def valid_name(name):
     if not name:
         return False
-    return validate_string(name, 1, 200)
+    return valid_string(name, 1, 200)
 
-def validate_email(email):
+def valid_email(email):
     EMAIL_REGEX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
     if not email:
         return False
-    if not validate_string(email, 1, 100):
+    if not valid_string(email, 1, 100):
         return False
     return re.match(EMAIL_REGEX, email)
 
+def valid_phone(phone):
+    PHONE_REGEX = r'^\+?[0-9]{7,15}$'
+
+    if not phone:
+        return False
+    if not valid_string(phone, 1, 20):
+        return False
+    return re.match(PHONE_REGEX, phone)
 
 
-def validate_img(img):
+def valid_img(img):
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
     ALLOWED_MIMETYPES = {"image/jpeg", "image/png", "image/gif"}
 
@@ -54,4 +63,7 @@ def validate_img(img):
         return False
     return True
 
-
+def validate_where(region, com, sector):
+    if not region or not com:
+        return False
+    return True
