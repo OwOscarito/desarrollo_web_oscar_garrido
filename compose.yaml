@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    hostname: mysql_db
+
+    environment:
+      MYSQL_ROOT_PASSWORD: programacionweb
+
+      MYSQL_DATABASE: tarea2
+      MYSQL_USER: cc5002
+      MYSQL_PASSWORD: programacionweb
+
+    ports:
+      - "3306:3306"
+      
+    volumes:
+    - mysql:/var/lib/mysql
+
+volumes:
+  mysql: {}
