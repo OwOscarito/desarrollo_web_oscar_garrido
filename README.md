@@ -9,19 +9,16 @@ Para correr el servidor web se necesita una base de datos mysql corriendo de for
 - Puerto: = ```3306```
 
 Se puede ejecutar en un contenedor con el archivo ```compose.yaml```:
-
 ```sh
 docker compose up -d
 ```
 
-Luego para inicializar la base de datos:
-
+Luego para inicializar la base de datos y los datos de region-comuna:
 ```sh
 python app/database/manage.py init
 ```
 
 Ademas de pueden eliminar todas la base de datos:
-
 ```sh
 python app/database/manage.py drop
 ```
