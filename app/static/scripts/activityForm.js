@@ -59,9 +59,14 @@ const updateOtherTopic = () => {
   }
 };
 
-const validateAndSubmit = () => {
-  if (validateForm()) {
-    window.location.href = "index.html";
+const updatePhoto = (photoInputId, nextPhotoInputId) => {
+  const nextPhotoInput = document.getElementById(nextPhotoInputId);
+  const photoInput = document.getElementById(photoInputId);
+  const photo = photoInput.files[0];
+  if (photo) {
+    nextPhotoInput.style.display = "block";
+  } else {
+    nextPhotoInput.style.display = "none";
   }
 }
 
@@ -75,8 +80,41 @@ document
 
 document
   .getElementById("submit-btn")
-  .addEventListener("click", validateAndSubmit);
+  .addEventListener("click", function (event) {
+    if (validateForm()) {
+      document.getElementById("confirm-dialog").showModal();
+    }
+  });
 
+document
+  .getElementById("confirm-btn")
+  .addEventListener("click", function (event) {
+    document.getElementById("activity-form").submit();
+    document.getElementById("").close();
+  });
+
+
+document
+  .getElementById("cancel-btn")
+  .addEventListener("click", function (event) {
+    document.getElementById("confirm-dialog").close();
+  });
+
+document
+  .getElementById("photo0")
+  .addEventListener("change", updatePhoto("photo0", "photo1"));
+
+document
+  .getElementById("photo1")
+  .addEventListener("change", updatePhoto("photo1", "photo2"));
+
+document
+  .getElementById("photo2")
+  .addEventListener("change", updatePhoto("photo2", "photo3"));
+
+document
+  .getElementById("photo3")
+  .addEventListener("change", updatePhoto("photo3", "photo4"));
 
 window.onload = () => {
   populateRegions();

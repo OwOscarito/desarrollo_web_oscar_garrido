@@ -13,8 +13,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Readex+Pro:wght@160..700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/catppuccin.css') }}" />
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/custom.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/catppuccin.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/custom.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 </head>
 
 <body>
@@ -27,10 +28,16 @@
       <a href="{{ url_for('estadisticas') }}">Estadisticas</a>
     </nav>
   </header>
+
   <main>
     {% block main %}
     {% endblock %}
   </main>
+
+  <footer>
+      <p>Portal de Actividades. Oscar Garrido O. AppsWeb 2025</p>
+  </footer>
+  
   {% block javascript %}
   {% endblock %}
 </body>

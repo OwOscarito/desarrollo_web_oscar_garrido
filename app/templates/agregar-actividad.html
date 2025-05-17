@@ -7,7 +7,7 @@
 {% if error %}
   <p class="notice error">Invalid Form: {{ error }}</p>
 {% endif %}
-<form name="activity-form" method="post" enctype="multipart/form-data">
+<form name="activity-form" id="activity-form" method="post" enctype="multipart/form-data">
   <article>
   <h3>¿Donde?</h3>
   <label for="select-region">Region:</label>
@@ -94,11 +94,20 @@
     <img id="preview4" src="" alt="Preview" style="display: none">
   </figure>
   -->
-
-  <a class="button" id="submit-btn">Crear Actividad</a>
-
-  <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
+  <div class="hcenter">
+    <a class="button" id="submit-btn">Crear Actividad</a>
+    <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
+  </div>
 </form>
+
+<dialog id="confirm-dialog">
+  <h4>Confimacion</h4>
+  <p>¿Esta seguro de que desea agregar esta actividad?</p>
+  <div class="hcenter">
+    <button id="confirm-btn">Si, estoy seguro</button>
+    <button id="cancel-btn">No, no estoy seguro</button>
+  </div>
+</dialog>
 
 {% endblock %}
 

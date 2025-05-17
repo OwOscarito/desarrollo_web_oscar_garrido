@@ -60,7 +60,7 @@ const validateWho = () => {
 
   const validatePhoneNumber = (number) => {
     const phoneRegex = /^\+\d{3}\.\d{8}$/;
-    return phoneRegex.test(number);
+    return !number || phoneRegex.test(number);
   };
 
   const validateContact = (contact) => {
@@ -144,7 +144,7 @@ const validateWhen = () => {
     alert("Ingrese una fecha de inicio válida.");
     return false;
   }
-  if (!validateEndDate(startDate, endDate) && endCheckbox) {
+  if (endCheckbox && !validateEndDate(startDate, endDate)) {
     alert("Ingrese una fecha de término válida.");
     return false;
   }
@@ -165,6 +165,21 @@ const validateWhat = () => {
     }
   }
 
+  const validatePhoto = (photoInputId, required=false) => {
+    const photoInput = document.getElementById(photoInputId);
+    if (!required && photoInput.files.length == 0) {
+      return true;
+    }
+    if (photoInput.files.length > 1) {
+      return false;
+    }
+    const photo = photoInput.files[0];
+    if (photo.type.includes("image/*")) {
+      return false;
+    }
+    return true;
+  };
+
   const description = document.getElementById("description").value;
   const topic = document.getElementById("select-topic").value;
   const otherTopic = document.getElementById("other-topic").value;
@@ -175,6 +190,26 @@ const validateWhat = () => {
   }
   if (!validateTopic(topic, otherTopic)) {
     alert("Seleccione un tema válido.");
+    return false;
+  }
+  if (!validatePhoto("photo0", true)) {
+    alert("Seleccione una foto válida.");
+    return false;
+  }
+  if (!validatePhoto("photo1")) {
+    alert("Seleccione una foto válida.");
+    return false;
+  }
+  if (!validatePhoto("photo2")) {
+    alert("Seleccione una foto válida.");
+    return false;
+  }
+  if (!validatePhoto("photo3")) {
+    alert("Seleccione una foto válida.");
+    return false;
+  }
+  if (!validatePhoto("photo4")) {
+    alert("Seleccione una foto válida.");
     return false;
   }
   return true;

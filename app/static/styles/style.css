@@ -1,0 +1,22 @@
+.vcenter {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    column-gap: 10px;
+}
+.hcenter {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    row-gap: 10px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    column-gap: 10px;
+    row-gap: 10px;
+}
