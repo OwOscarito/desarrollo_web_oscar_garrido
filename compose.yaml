@@ -1,6 +1,6 @@
 services:
   db:
-    image: mysql:latest
+    image: docker.io/mysql:latest
     container_name: mysql_db
     hostname: mysql_db
 
