@@ -1,7 +1,7 @@
 from __future__ import annotations
 import enum
 from sqlalchemy import create_engine, Column, BigInteger, String, DateTime, Enum, ForeignKey
-from sqlalchemy.orm import sessionmaker, declarative_base, relationship, Mapped, mapped_column
+from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -46,20 +46,20 @@ class Contacto(enum.Enum):
 class Region(Base):
     __tablename__ = "region"
 
-    id: Mapped[int] = Column(BigInteger, primary_key=True, autoincrement=True)
-    nombre: Mapped[str] = Column(String(200), nullable=False)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    nombre = Column(String(200), nullable=False)
 
     comuna = relationship("Comuna", back_populates="region")
 
 class Comuna(Base):
     __tablename__ = "comuna"
 
-    id: Mapped[int] = Column(BigInteger, primary_key=True, autoincrement=True)
-    nombre: Mapped[str] = Column(String(200), nullable=False)
-    region_id: Mapped[int] = Column(BigInteger, ForeignKey("region.id"), nullable=False)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    nombre = Column(String(200), nullable=False)
+    region_id = Column(BigInteger, ForeignKey("region.id"), nullable=False)
 
-    region: Mapped["Region"] = relationship("Region", back_populates="comuna")
-    actividad: Mapped["Actividad"] = relationship("Actividad", back_populates="comuna")
+    region = relationship("Region", back_populates="comuna")
+    actividad = relationship("Actividad", back_populates="comuna")
 
 class Actividad(Base):
     __tablename__ = "actividad"
@@ -74,10 +74,10 @@ class Actividad(Base):
     dia_hora_termino = Column(DateTime)
     descripcion = Column(String(500))
 
-    comuna: Mapped["Comuna"] = relationship("Comuna", back_populates="actividad")
-    actividad_tema: Mapped["ActividadTema"] = relationship("ActividadTema", back_populates="actividad")
-    contactar_por: Mapped["ContactarPor"] = relationship("ContactarPor", back_populates="actividad")
-    foto: Mapped["Foto"] = relationship("Foto", back_populates="actividad")
+    comuna = relationship("Comuna", back_populates="actividad")
+    actividad_tema = relationship("ActividadTema", back_populates="actividad")
+    contactar_por = relationship("ContactarPor", back_populates="actividad")
+    foto = relationship("Foto", back_populates="actividad")
 
 class ActividadTema(Base):
     __tablename__ = "actividad_tema"
@@ -87,7 +87,7 @@ class ActividadTema(Base):
     glosa_otro = Column(String(15))
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
     
-    actividad: Mapped["Actividad"] = relationship("Actividad", back_populates="actividad_tema")
+    actividad = relationship("Actividad", back_populates="actividad_tema")
 
 class ContactarPor(Base):
     __tablename__ = "contactar_por"
@@ -97,7 +97,7 @@ class ContactarPor(Base):
     identificador = Column(String(150), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
     
-    actividad: Mapped["Actividad"] = relationship("Actividad", back_populates="contactar_por")
+    actividad = relationship("Actividad", back_populates="contactar_por")
 
 class Foto(Base):
     __tablename__ = "foto"
@@ -107,7 +107,7 @@ class Foto(Base):
     nombre_archivo = Column(String(300), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
     
-    actividad: Mapped["Actividad"] = relationship("Actividad", back_populates="foto")
+    actividad = relationship("Actividad", back_populates="foto")
 
 # --- Functions ---
 
@@ -176,3 +176,15 @@ def get_activities(quantity=1):
     activities = session.query(Actividad).limit(quantity).all()
     session.close()
     return activities
+
+def get_commune_by_id(id):
+    session = SessionLocal()
+    location = session.query(Comuna).filter(Comuna.id == id).first()
+    session.close()
+    return location
+
+def get_count(table):
+    session = SessionLocal()
+    count = session.query(table.id).count()
+    session.close()
+    return count

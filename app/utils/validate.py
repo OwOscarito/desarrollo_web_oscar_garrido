@@ -1,6 +1,6 @@
 import re
 import filetype
-
+from app.database import db
 # Generic string validator
 def valid_string(string, min_length=0, max_length=100):
     if min_length <= len(string) <= max_length:
@@ -15,8 +15,10 @@ def valid_location(region, com):
     return True
 
 def valid_sector(sector):
+    if not sector:
+        return True
     return valid_string(sector, 0, 100)
-
+    
 # Who
 def valid_name(name):
     if not name:
@@ -36,7 +38,7 @@ def valid_phone(phone):
     PHONE_REGEX = r'^\+?[0-9]{7,15}$'
 
     if not phone:
-        return False
+        return True
     if not valid_string(phone, 1, 20):
         return False
     return re.match(PHONE_REGEX, phone)
