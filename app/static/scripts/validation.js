@@ -166,17 +166,19 @@ const validateWhat = () => {
   }
 
   const validatePhoto = (photoInputId, required=false) => {
-    const photoInput = document.getElementById(photoInputId);
+    let photoInput = document.getElementById(photoInputId);
     if (!required && photoInput.files.length == 0) {
       return true;
     }
     if (photoInput.files.length > 1) {
       return false;
     }
-    const photo = photoInput.files[0];
+    /*
+    let photo = photoInput.files[0];
     if (photo.type.includes("image/*")) {
       return false;
     }
+    */
     return true;
   };
 

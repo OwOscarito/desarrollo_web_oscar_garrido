@@ -5,32 +5,36 @@
 
 <h2>Ultimas 5 Actividades</h2>
 
-<table id="activity-table">
-  <tr>
-    <th>Inicio</th>
-    <th>Termino</th>
-    <th>Comuna</th>
-    <th>Sector</th>
-    <th>Tema</th>
-    <th>Foto</th>
-  </tr>
-  {% if actividades %}
-  {% for actividad in actividades %}
-  <tr>
-    <td>actividad</td>
-    <td>actividad</td>
-    <td>actividad</td>
-    <td>actividad</td>
-    <td>actividad</td>
-    <td>actividad</td>
-  </tr>
-  {% endfor %}
-  {% else %}
-  <tr>
-    <td colspan="6"> No hay actividades </td>
-  </tr>
-  {% endif %}
-</table>
+<div class="hcenter">
+  <table id="activity-table">
+    <tr>
+      <th>Inicio</th>
+      <th>Termino</th>
+      <th>Comuna</th>
+      <th>Sector</th>
+      <th>Tema</th>
+      <th>Foto</th>
+    </tr>
+    {% if activities %}
+      {% for activity in activities %}
+      <tr class="clickable" onclick="window.location.href='{{ url_for('actividad', activity.id) }}'">
+        <td class="hcenter">{{ activity.start }}</td>
+        <td class="hcenter">{{ activity.end }}</td>
+        <td class="hcenter">{{ activity.commun }}</td>
+        <td class="hcenter">{{ activity.sector }}</td>
+        <td class="hcenter">{{ activity.topic }}</td>
+        <td class="hcenter"><img src="{{ activity.photo }}" alt="Foto"></td>
+      </tr>
+      {% endfor %}
+    {% else %}
+    <tr>
+      <td colspan="6">
+        <p class="hcenter">No hay actividades</p>
+      </td>
+    </tr>
+    {% endif %}
+  </table>
+</div>
 <a class="button" href="{{ url_for('agregar') }}">Agregar actividad</a>
 <a class="button" href="{{ url_for('listado') }}">Ver listado</a>
 {% endblock %}

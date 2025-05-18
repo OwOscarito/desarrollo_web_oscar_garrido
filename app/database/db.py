@@ -2,6 +2,7 @@ from __future__ import annotations
 import enum
 from sqlalchemy import create_engine, Column, BigInteger, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
+import os
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -116,14 +117,16 @@ def create_activity(
     nombre,
     email,
     dia_hora_inicio,
+    uploads_folder,
     sector=None,
     celular=None,
     dia_hora_termino=None,
     descripcion=None,
     tema=None,
     glosa_otro=None,
-    contactos: list = None,
-    fotos: list = None,
+    contactos: list = [],
+    fotos: list = [],
+
 ):
     session = SessionLocal()
     new_activity = Actividad(
@@ -138,7 +141,11 @@ def create_activity(
     )
 
     if tema:
-        new_tema = ActividadTema(tema=tema, glosa_otro=glosa_otro)
+        new_tema = ActividadTema(
+            tema=tema, 
+            glosa_otro=glosa_otro,
+            actividad_id=new_activity.id
+            )
     elif glosa_otro:
         new_tema = ActividadTema(tema=Tema.otro, glosa_otro=glosa_otro)
     else:
@@ -150,15 +157,18 @@ def create_activity(
             new_contacto = ContactarPor(
                 nombre=contacto["nombre"],
                 identificador=contacto["identificador"],
+                actividad_id=new_activity.id,
             )
             new_contactos.append(new_contacto)
 
     if fotos:
         new_fotos = []
+        base_path = os.path.join(uploads_folder, str(new_activity.id))
         for foto in fotos:
             new_foto = Foto(
-                ruta_archivo=foto["ruta_archivo"],
-                nombre_archivo=foto["nombre_archivo"],
+                ruta_archivo=base_path,
+                nombre_archivo=foto.filename,
+                actividad_id=new_activity.id,
             )
             new_fotos.append(new_foto)
 
@@ -171,11 +181,25 @@ def create_activity(
     session.commit()
     session.close()
 
-def get_activities(quantity=1):
+    return {"activity": new_activity, "tema": new_tema, "contactos": new_contactos, "fotos": new_fotos}
+            
+def get_activities(quantity=1, offset=0):
     session = SessionLocal()
-    activities = session.query(Actividad).limit(quantity).all()
+    activities = session.query(Actividad).offset(offset).limit(quantity).all()
     session.close()
     return activities
+
+def get_activity_by_id(id):
+    session = SessionLocal()
+    activity = session.query(Actividad).filter(Actividad.id == id).first()
+    session.close()
+    return activity
+
+def get_region_by_id(id):
+    session = SessionLocal()
+    location = session.query(Region).filter(Region.id == id).first()
+    session.close()
+    return location
 
 def get_commune_by_id(id):
     session = SessionLocal()

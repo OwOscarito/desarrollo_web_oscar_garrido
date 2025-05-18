@@ -29,6 +29,11 @@ def execute_sql_file(session, file: str):
 
     sql_file.close()
 
+def init_tables():
+    session = SessionLocal()
+    execute_sql_file(session, 'app/database/tarea2.sql')
+    session.commit()
+
 def init_region_comuna():
     session = SessionLocal()
     execute_sql_file(session, 'app/database/region-comuna.sql')
@@ -50,7 +55,7 @@ def init_db():
     REGION_COUNT = 16
     COMUNA_COUNT = 345
 
-    Base.metadata.create_all(engine)
+    init_tables()
     print("¡Tablas creadas!")
 
     if (get_count(Comuna) < REGION_COUNT 

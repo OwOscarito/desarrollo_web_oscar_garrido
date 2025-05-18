@@ -13,7 +13,7 @@ Se puede ejecutar en un contenedor con el archivo ```compose.yaml```:
 docker compose up -d
 ```
 
-Luego para inicializar la base de datos y los datos de region-comuna:
+Luego para inicializar las tablas de la base de datos y los datos de region-comuna:
 ```sh
 python app/database/manage.py init
 ```
