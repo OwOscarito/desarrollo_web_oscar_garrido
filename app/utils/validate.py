@@ -41,7 +41,7 @@ def valid_email(email):
     return re.match(EMAIL_REGEX, email)
 
 def valid_phone(phone):
-    PHONE_REGEX = r'/^\+\d{3}\.\d{8}$/'
+    PHONE_REGEX = r'^\+\d{3}\.\d{8}$'
 
     if not phone:
         return True
