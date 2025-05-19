@@ -23,3 +23,11 @@
 .clickable:hover {
     background-color: var(--ctp-latte-overlay0);
 }
+.small-image {
+    width: 320px;
+    height: 240px;
+}
+.large-image {
+    width: 800px;
+    height: 600px;
+}

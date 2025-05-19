@@ -5,7 +5,7 @@
 {% block main %}
 <h2>Agregar Actividad</h2>
 {% if error %}
-  <p class="notice error">Invalid Form: {{ error }}</p>
+  <p class="notice error">Error en el formulario: {{ error }}</p>
 {% endif %}
 <form name="activity-form" id="activity-form" method="post" enctype="multipart/form-data">
   <article>
@@ -47,13 +47,13 @@
     <input id="telegram" type="text" name="telegram-id" style="display: none"></li>
 
     <li><input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
-    <input id="tiktok" type="text" name="tiktok_id" style="display: none"></li>
+    <input id="tiktok" type="text" name="tiktok-id" style="display: none"></li>
 
     <li><input type="checkbox" name="x" onclick="updateInput(this);">X
     <input id="x" type="text" name="x-id" style="display: none"></li>
 
     <li><input type="checkbox" name="other" onclick="updateInput(this);">Otra
-    <input id="other-id" type="text" name="other" style="display: none"></li>
+    <input id="other" type="text" name="other-id" style="display: none"></li>
   </ul>
   </article>
 

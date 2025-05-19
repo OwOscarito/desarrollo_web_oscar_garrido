@@ -5,21 +5,19 @@ from app.database import db
 
 # Generic string validator
 def valid_string(string, min_length=0, max_length=100):
-    if min_length <= len(string) <= max_length:
-        return True
-    return False
+    return (min_length <= len(string) <= max_length)
 
 # Where
 def valid_location(regionId, communeId):
     if not regionId or not communeId:
         return False
-
+    print(f"regionId: {regionId}, communeId: {communeId}")
     region = db.get_region_by_id(regionId)
     commune = db.get_commune_by_id(communeId)
+    print(f"region: {region}, commune: {commune}")
     if not region or not commune:
         return False
-    
-    if regionId != commune.region_id:
+    if region.id != commune.region_id:
         return False
     return True
 
@@ -52,8 +50,6 @@ def valid_phone(phone):
     return re.match(PHONE_REGEX, phone)
 
 def valid_contact(contact_type, contact_id):
-    if not contact_id and not contact_type:
-        return True
     if contact_type not in db.Contacto:
         return False
     if not valid_string(contact_id, 4, 50):
@@ -73,8 +69,8 @@ def valid_end_date(start_date, end_date):
     if not start_date or not end_date:
         return False
     try:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M')
+        end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M')
     except ValueError:
         return False
     if start_date > end_date:
@@ -85,13 +81,15 @@ def valid_description(description):
     COLUMNS = 50
     ROWS = 10
     DESCRIPTION_LENGTH = COLUMNS * ROWS
+    if not description:
+        return True
 
     return valid_string(description, 0, DESCRIPTION_LENGTH)
 
 def valid_topic(topic, other_topic):
     if not topic:
         return False
-    if topic == "otro" and not valid_string(other_topic, 3, 15):
+    if topic == "otro" and (not other_topic or not valid_string(other_topic, 3, 15)):
         return False
     elif topic not in db.Tema:
         return False

@@ -90,9 +90,7 @@ document
   .getElementById("confirm-btn")
   .addEventListener("click", function (event) {
     document.getElementById("activity-form").submit();
-    document.getElementById("").close();
   });
-
 
 document
   .getElementById("cancel-btn")

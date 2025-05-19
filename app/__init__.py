@@ -1,12 +1,10 @@
 from flask import Flask, request, render_template, redirect, url_for
 from app.database import db
-from werkzeug.utils import secure_filename
 from app.utils import validate
 import bleach
 import os
 
 UPLOAD_FOLDER = 'static/uploads'
-DEBUG_POST = True
 
 app = Flask(__name__)
 
@@ -16,7 +14,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def sanitize_input(string):
-    if not string or not isinstance(string, str):
+     
+    if None or not string or not isinstance(string, str):
         return string
     return bleach.clean(string)
 
@@ -34,33 +33,44 @@ def estadisticas():
 @app.route('/agregar',methods=["GET", "POST"])
 def agregar():
     if request.method == "POST":
-        activity_form = request.form
-        if DEBUG_POST: 
-            print(activity_form)
+        print(request.form)
+        print(request.files)
 
         error_list = []
         # Where
-        region = activity_form['region']
-        commune = activity_form['commune']
-        sector = bleach.clean(activity_form['sector'])
+        region = request.form.get('select-region')
+        commune = request.form.get('select-commune')
+        sector = sanitize_input(request.form.get('sector'))
+        
+        print(f"location: {region}, {commune}, {sector}")
 
         if not validate.valid_location(region, commune):
             error_list.append("Ubicación inválida")
         if not validate.valid_sector(sector):
             error_list.append("Sector inválido")
-        
-        # Who
-        name = bleach.clean(activity_form['name'])
-        email = activity_form['email']
-        phone = activity_form['phone']
 
-        contactos = [
-            activity_form['whatsapp-id'],
-            activity_form['email-id'],
-            activity_form['phone-id'],
-            activity_form['facebook-id'],
-            activity_form['twitter-id'],
+        # Who
+        name = sanitize_input(request.form.get('name'))
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        contact_checks = [
+            request.form.get('whatsapp'),
+            request.form.get('instagram'),
+            request.form.get('telegram'),
+            request.form.get('tiktok'),
+            request.form.get('x'),
+            request.form.get('otro')
         ]
+        contact_ids = [
+            sanitize_input(request.form.get('whatsapp-id')),
+            sanitize_input(request.form.get('instagram-id')),
+            sanitize_input(request.form.get('telegram-id')),
+            sanitize_input(request.form.get('tiktok-id')),
+            sanitize_input(request.form.get('x-id')),
+            sanitize_input(request.form.get('otro-id'))
+        ]
+        print(f'who: {name}, {email}, {phone}, {contact_checks}, {contact_ids}')
+
         if not validate.valid_name(name):
             error_list.append("Nombre inválido")
         if not validate.valid_email(email):
@@ -68,31 +78,35 @@ def agregar():
         if not validate.valid_phone(phone):
             error_list.append("Teléfono inválido")
 
+        for i in range(len(contact_checks)):
+            if not contact_checks[i]:
+                contact_ids[i] = None
+            elif contact_checks[i] == "on" and not validate.valid_contact(contact_checks[i], contact_ids[i]):
+                error_list.append("Contacto inválido")
+
         # When 
-        start_date = activity_form['start_date']
-        end_date = activity_form['end_date']
+        start_date = request.form.get('start_date')
+        end_date = request.form.get('end_date')
         if not validate.valid_date(start_date):
-            error_list.append("Fecha de término inválida")
+            error_list.append("Fecha de inicio inválida")
         if not validate.valid_end_date(start_date, end_date):
             error_list.append("Fecha de término inválida")
-    
-        
-        # What
-        topic = activity_form['topic']
-        other_topic = activity_form['other_topic']
-        description = activity_form['description']
 
-        if validate.valid_topic(topic, other_topic):
+        print(f"when: {start_date}, {end_date}")
+
+
+        # What
+        topic = request.form.get('topic')
+        other_topic = request.form.get('other_topic')
+        description = request.form.get('description')
+        print(f"what: {topic}, {other_topic}, {description}")
+
+        if not validate.valid_topic(topic, other_topic):
             error_list.append("Tema inválido")
-        if validate.valid_description(description):
+        if not validate.valid_description(description):
             error_list.append("Descripción inválida")
-        
-        activity_files = 
-        if DEBUG_POST:
-            print(request.files)
 
         # Files
-
         photos = [
             request.files.get("photo0"),
             request.files.get("photo1"),
@@ -100,16 +114,18 @@ def agregar():
             request.files.get("photo3"),
             request.files.get("photo4")
         ]
-        for photo in photos:
-            if photo and photo.filename:
-                filename = secure_filename(photo.filename)
-                
+
+        photos = [photo for photo in photos if photo and photo.filename]
+
         if not validate.valid_photos(photos):
             error_list.append("Archivos invalidos")
 
         if error_list:
-            error = "Error en el formulario: " + ", ".join(error_list)
-            render_template('agregar-actividad.html', error=error)
+            error = ", ".join(error_list)
+            print(error)
+            return render_template('agregar-actividad.html', error=error)
+
+        print("no error")
 
         db_objects = db.create_activity(
             comuna_id=commune,
@@ -122,18 +138,15 @@ def agregar():
             uploads_folder=app.config['UPLOAD_FOLDER'],
         )
         
-        db_photos = db_objects["fotos"]
-        for db_photo in db_photos:
-            if DEBUG_POST:
-                print(db_photo)
-            filename = secure_filename(db_photo.nombre_archivo)
-            base_path = os.path.join(app.config['UPLOAD_FOLDER'], str(db_photo.actividad_id))
-            if not os.path.exists(base_path):
-                os.makedirs(base_path)
-            db_photo.ruta_archivo = os.path.join(base_path, filename)
-            db_photo.save()
+        db_photos:list[db.Foto] = db_objects["fotos"]
+        for photo, db_photo in photos, db_photos:
+            if photo and db_photo:
+                path = os.path.join(db_photo.ruta_archivo, db_photo.nombre_archivo)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                photo.save(path)
 
-        return redirect(url_for('index'))
+        return redirect(url_for('listado'))
                         
     if request.method == "GET":
         return render_template('agregar-actividad.html')

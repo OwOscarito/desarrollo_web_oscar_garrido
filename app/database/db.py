@@ -3,6 +3,7 @@ import enum
 from sqlalchemy import create_engine, Column, BigInteger, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 import os
+from werkzeug.utils import secure_filename
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -167,7 +168,7 @@ def create_activity(
         for foto in fotos:
             new_foto = Foto(
                 ruta_archivo=base_path,
-                nombre_archivo=foto.filename,
+                nombre_archivo=secure_filename(foto.filename),
                 actividad_id=new_activity.id,
             )
             new_fotos.append(new_foto)
