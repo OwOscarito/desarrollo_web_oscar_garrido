@@ -86,8 +86,8 @@ class ActividadTema(Base):
     __tablename__ = "actividad_tema"
 
     id = Column(BigInteger, primary_key=True, autoincrement=True)
-    tema = Column(Enum(Tema), nullable=False)
-    glosa_otro = Column(String(15))
+    tema = Column(Enum(Tema))
+    glosa_otro = Column(String(15), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
     
     actividad = relationship("Actividad", back_populates="actividad_tema")
@@ -144,24 +144,24 @@ def create_activity(
     session.add(new_activity)
     session.flush()
 
-    if tema:
-        new_tema = ActividadTema(
-            tema=tema, 
-            glosa_otro=glosa_otro,
-            actividad_id=new_activity.id
-            )
-    elif glosa_otro:
-        new_tema = ActividadTema(tema=Tema.otro, glosa_otro=glosa_otro)
-    else:
-        raise ValueError("Como llegamos aca?")
-    
+    activity_id = new_activity.id
+    new_tema = ActividadTema(
+        tema=tema, 
+        glosa_otro=glosa_otro,
+        actividad_id=activity_id
+    )
+    print(new_tema)
+    print(tema)
+    print(glosa_otro)
+    print(new_activity.id)
+
     new_contactos = []
 
     for contacto, id in contactos:
         new_contacto = ContactarPor(
             nombre=contacto,
             identificador=id,
-            actividad_id=new_activity.id,
+            actividad_id=activity_id
         )
         new_contactos.append(new_contacto)
 
@@ -174,7 +174,7 @@ def create_activity(
         new_foto = Foto(
             ruta_archivo=base_path,
             nombre_archivo=filename,
-            actividad_id=new_activity.id,
+            actividad_id=activity_id
         )
         photo_paths.append(os.path.join(base_path, filename))
         new_fotos.append(new_foto)
@@ -184,6 +184,7 @@ def create_activity(
         session.add(new_contacto)
     for new_foto in new_fotos:
         session.add(new_foto)
+
     session.commit()
     session.close()
 

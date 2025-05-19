@@ -175,11 +175,11 @@ def agregar():
             fotos = photos,
         )
 
-        path = os.path.join(os.path("app/"), str(base_path))
+        path = os.path.join("app", str(base_path))
         if not os.path.exists(path):
             os.makedirs(path)
         for photo, photo_path in zip(photos, photo_paths):
-            photo.save(os.path.join(os.path("app/"), photo_path))
+            photo.save(os.path.join("app", photo_path))
 
 
         return redirect(url_for('listado'))
