@@ -78,10 +78,10 @@
 
   <label for="photo">Fotos</label>
 
-  <input type="file" name="photo0" id="photo0" accept="image/*" required>
-  <input type="file" name="photo1" id="photo1" accept="image/*" style="display: none">
-  <input type="file" name="photo2" id="photo2" accept="image/*" style="display: none">
-  <input type="file" name="photo3" id="photo3" accept="image/*" style="display: none">
+  <input type="file" onclick="this.value = null" name="photo0" id="photo0" accept="image/*" required>
+  <input type="file" onclick="this.value = null" name="photo1" id="photo1" accept="image/*" style="display: none">
+  <input type="file" onclick="this.value = null" name="photo2" id="photo2" accept="image/*" style="display: none">
+  <input type="file" onclick="this.value = null" name="photo3" id="photo3" accept="image/*" style="display: none">
   <input type="file" name="photo4" id="photo4" accept="image/*" style="display: none">
   </article>
 
@@ -108,7 +108,6 @@
     <button id="cancel-btn">No, no estoy seguro</button>
   </div>
 </dialog>
-
 {% endblock %}
 
 {% block javascript %}

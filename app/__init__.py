@@ -3,6 +3,7 @@ from app.database import db
 from app.utils import validate
 import bleach
 import os
+from datetime import datetime
 
 UPLOAD_FOLDER = 'static/uploads'
 
@@ -155,15 +156,20 @@ def agregar():
             comuna_id=commune,
             nombre=name,
             email=email,
-            dia_hora_inicio=start_date,
+            dia_hora_inicio=datetime.strptime(start_date, '%Y-%m-%dT%H:%M'),
+            uploads_folder=app.config['UPLOAD_FOLDER'],
             sector=sector,
             celular=phone,
-            dia_hora_termino=end_date,
-            uploads_folder=app.config['UPLOAD_FOLDER'],
+            dia_hora_termino=datetime.strptime(end_date, '%Y-%m-%dT%H:%M') if end_checkbox == "on" else None,
+            descripcion=description,
+            tema=topic,
+            glosa_otro=other_topic,
+            contactos = [contact for contact in zip(CONTACTS, contact_ids) if contact[1]],
+            fotos = photos,
         )
         
         db_photos:list[db.Foto] = db_objects["fotos"]
-        for photo, db_photo in photos, db_photos:
+        for photo, db_photo in zip(photos, db_photos):
             if photo and db_photo:
                 path = os.path.join(db_photo.ruta_archivo, db_photo.nombre_archivo)
                 if not os.path.exists(path):
@@ -199,14 +205,11 @@ def index():
     for actividad in db.get_activities(5):
         actividades.append({
             'id': actividad.id,
-            'nombre': actividad.nombre,
-            'descripcion': actividad.descripcion,
-            'fecha_inicio': actividad.fecha_inicio,
-            'fecha_fin': actividad.fecha_fin,
-            'region': actividad.region,
-            'comuna': actividad.comuna,
+            'start': actividad.fecha_inicio,
+            'end': actividad.fecha_fin,
+            'commune': actividad.comuna,
             'sector': actividad.sector,
-            'foto': actividad.foto,
+            'photo': actividad.foto,
         })
     return render_template('index.html', actividades=actividades)
 

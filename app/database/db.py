@@ -140,6 +140,8 @@ def create_activity(
         dia_hora_termino=dia_hora_termino,
         descripcion=descripcion,
     )
+    session.add(new_activity)
+    session.flush()
 
     if tema:
         new_tema = ActividadTema(
@@ -152,28 +154,27 @@ def create_activity(
     else:
         raise ValueError("Como llegamos aca?")
     
-    if contactos:
-        new_contactos = []
-        for contacto in contactos:
-            new_contacto = ContactarPor(
-                nombre=contacto["nombre"],
-                identificador=contacto["identificador"],
-                actividad_id=new_activity.id,
-            )
-            new_contactos.append(new_contacto)
+    new_contactos = []
 
-    if fotos:
-        new_fotos = []
-        base_path = os.path.join(uploads_folder, str(new_activity.id))
-        for foto in fotos:
-            new_foto = Foto(
-                ruta_archivo=base_path,
-                nombre_archivo=secure_filename(foto.filename),
-                actividad_id=new_activity.id,
-            )
-            new_fotos.append(new_foto)
+    for contacto in contactos:
+        new_contacto = ContactarPor(
+            nombre=contacto["nombre"],
+            identificador=contacto["identificador"],
+            actividad_id=new_activity.id,
+        )
+        new_contactos.append(new_contacto)
 
-    session.add(new_activity)
+
+    new_fotos = []
+    base_path = os.path.join(uploads_folder, str(new_activity.id))
+    for foto in fotos:
+        new_foto = Foto(
+            ruta_archivo=base_path,
+            nombre_archivo=secure_filename(foto.filename),
+            actividad_id=new_activity.id,
+        )
+        new_fotos.append(new_foto)
+
     session.add(new_tema)
     for new_contacto in new_contactos:
         session.add(new_contacto)
