@@ -2,11 +2,10 @@ from flask import Flask, request, render_template, redirect, url_for
 from app.database import db
 from app.utils import validate
 import bleach
-import os
 from datetime import datetime
+import pathlib
 
-
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = 'uploads'
 
 app = Flask(__name__)
 
@@ -19,9 +18,6 @@ def sanitize_input(string):
     if None or not string or not isinstance(string, str):
         return string
     return bleach.clean(string)
-
-def dict_map(func, d):
-    return {k: func(v) for k, v in d.items()}
 
 @app.route('/base',methods=["GET"])
 def base():
@@ -99,6 +95,12 @@ def agregar():
             elif contact_checks[i] == "on" and not validate.valid_contact(contact_ids[i]):
                 error_list.append("Contacto inválido")
 
+        contacts = []
+        for i in range(len(contact_checks)):
+            if contact_checks[i] == "on":
+                contacts.append((CONTACTS[i], contact_ids[i]))
+        print(contacts)
+
         # When 
         start_date = request.form.get('start-datetime-input')
         end_checkbox = request.form.get('end-checkbox')
@@ -129,14 +131,11 @@ def agregar():
             if not validate.valid_topic(topic):
                 error_list.append("Tema inválido")
      
-            
-        
         if description:
             if not validate.valid_description(description):
                 error_list.append("Descripción inválida")
         else:
             description = None
-
 
         # Files
         photos = [
@@ -156,10 +155,10 @@ def agregar():
             error = ", ".join(error_list)
             print(error)
             return render_template('agregar-actividad.html', error=error)
-
         print("no error")
 
-        base_path, photo_paths = db.create_activity(
+
+        base_path = db.create_activity(
             comuna_id=commune,
             nombre=name,
             email=email,
@@ -171,16 +170,16 @@ def agregar():
             descripcion=description,
             tema=topic,
             glosa_otro=other_topic,
-            contactos = [contact for contact in zip(CONTACTS, contact_ids) if contact[1]],
+            contactos = contacts,
             fotos = photos,
         )
 
-        path = os.path.join("app", str(base_path))
-        if not os.path.exists(path):
-            os.makedirs(path)
-        for photo, photo_path in zip(photos, photo_paths):
-            photo.save(os.path.join("app", photo_path))
 
+        path = pathlib.Path('app/static').joinpath(str(base_path))
+        path.mkdir(parents=True, exist_ok=True)
+        for photo in photos:
+            photo.save(path.joinpath(photo.filename))
+        print(f"saved in {path}")
 
         return redirect(url_for('listado'))
                         
@@ -193,9 +192,47 @@ def actividad(id=None):
     if not id:
         return redirect(url_for('listado'))
     
-    activity = db.get_activity_by_id(id)
-    if not activity:
+    activity_db = db.get_activity_by_id(id)
+    if not activity_db:
         return redirect(url_for('listado'))
+    
+    commune_db = db.get_commune_by_id(activity_db.comuna_id)
+    region_db = db.get_region_by_id(commune_db.region_id)
+
+    contactos_db = db.get_contacts_by_activity_id(activity_db.id)
+    contacts = [{"name": contact.nombre.name.capitalize(), "id": contact.identificador} for contact in contactos_db]
+
+    dt_end = activity_db.dia_hora_termino
+    if not dt_end:
+        dt_end = ""
+
+    topic_db = db.get_topic_by_activity_id(activity_db.id)[0]
+    if topic_db.tema.name == "otro":
+        topic = topic_db.glosa_otro
+    else:
+        topic = topic_db.tema.name
+    print(topic)
+    photos_db = db.get_photos_by_activity_id(activity_db.id)
+    photo_paths = [url_for('static', filename=pathlib.Path(photo.ruta_archivo).joinpath(photo.nombre_archivo).as_posix()) for photo in photos_db]
+    activity = {
+        'id': activity_db.id,
+        'commune': commune_db.nombre,
+        'region': region_db.nombre,
+        'sector': activity_db.sector,
+        'start': activity_db.dia_hora_inicio,
+        'end': dt_end,
+
+        'name': activity_db.nombre,
+        'email': activity_db.email,
+        'phone': activity_db.celular,
+        'contacts': contacts,
+
+        'description': activity_db.descripcion,
+
+        'topic': topic,
+        'photos': photo_paths
+    }
+    print(activity)
     return render_template('informacion-actividad.html', activity=activity)
 
 @app.route('/listado',methods=["GET"])
@@ -203,13 +240,24 @@ def listado():
     activities = []
     for activity in db.get_last_activities(5):
         photos = db.get_photos_by_activity_id(activity.id)
+        dt_end = activity.dia_hora_termino
+        if not dt_end:
+            dt_end = ""
+        db_topic = db.get_topic_by_activity_id(activity.id)[0]
+        if db_topic.tema.name == "otro":
+            topic = db_topic.glosa_otro
+        else:
+            topic = db_topic.tema.name
+
         activities.append({
             'id': activity.id,
             'start': activity.dia_hora_inicio,
-            'end': activity.dia_hora_termino,
+            'end': dt_end,
             'commune': db.get_commune_by_id(activity.comuna_id).nombre,
             'sector': activity.sector,
-            'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
+            'topic': topic,
+            'name': activity.nombre,
+            'photo': url_for('static',filename=pathlib.Path(photos[0].ruta_archivo).joinpath(photos[0].nombre_archivo).as_posix())
         })
     print(activities)
     return render_template('listado-actividades.html', activities=activities)
@@ -223,10 +271,10 @@ def index():
         if not dt_end:
             dt_end = ""
         db_topic = db.get_topic_by_activity_id(activity.id)[0]
-        if db_topic.tema == "otro":
+        if db_topic.tema.name == "otro":
             topic = db_topic.glosa_otro
         else:
-            topic = db_topic.tema
+            topic = db_topic.tema.name
 
         activities.append({
             'id': activity.id,
@@ -234,8 +282,8 @@ def index():
             'end': dt_end,
             'commune': db.get_commune_by_id(activity.comuna_id).nombre,
             'sector': activity.sector,
-            'tema': topic,
-            'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
+            'topic': topic,
+            'photo': url_for('static', filename=pathlib.Path(photos[0].ruta_archivo).joinpath(photos[0].nombre_archivo).as_posix())
         })
     print(activities)
     return render_template('index.html', activities=activities)

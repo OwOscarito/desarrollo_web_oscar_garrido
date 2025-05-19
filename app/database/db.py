@@ -2,9 +2,8 @@ from __future__ import annotations
 import enum
 from sqlalchemy import create_engine, Column, BigInteger, String, DateTime, Enum, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
-import os
 from werkzeug.utils import secure_filename
-
+import pathlib
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
 DB_PASSWORD = "programacionweb"
@@ -150,25 +149,18 @@ def create_activity(
         glosa_otro=glosa_otro,
         actividad_id=activity_id
     )
-    print(new_tema)
-    print(tema)
-    print(glosa_otro)
-    print(new_activity.id)
-
+    print(contactos)
     new_contactos = []
-
-    for contacto, id in contactos:
+    for name, id in contactos:
         new_contacto = ContactarPor(
-            nombre=contacto,
+            nombre=name,
             identificador=id,
             actividad_id=activity_id
         )
         new_contactos.append(new_contacto)
 
-
     new_fotos = []
-    photo_paths = []
-    base_path = uploads_folder + "/" + str(new_activity.id)
+    base_path = pathlib.Path(uploads_folder).joinpath(str(activity_id)).as_posix()
     for foto in fotos:
         filename = secure_filename(foto.filename)
         new_foto = Foto(
@@ -176,7 +168,6 @@ def create_activity(
             nombre_archivo=filename,
             actividad_id=activity_id
         )
-        photo_paths.append(os.path.join(base_path, filename))
         new_fotos.append(new_foto)
 
     session.add(new_tema)
@@ -188,7 +179,7 @@ def create_activity(
     session.commit()
     session.close()
 
-    return base_path, photo_paths
+    return base_path
             
 def get_last_activities(quantity=1, offset=0):
     session = SessionLocal()
@@ -219,6 +210,12 @@ def get_photos_by_activity_id(id):
     photos = session.query(Foto).filter(Foto.actividad_id == id).all()
     session.close()
     return photos
+
+def get_contacts_by_activity_id(id):
+    session = SessionLocal()
+    contactos = session.query(ContactarPor).filter(ContactarPor.actividad_id == id).all()
+    session.close()
+    return contactos
 
 def get_topic_by_activity_id(id):
     session = SessionLocal()

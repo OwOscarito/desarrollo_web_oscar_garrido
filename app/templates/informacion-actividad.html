@@ -8,29 +8,33 @@
 
 <h3>Donde?</h3>
 
+<p><strong>Region:</strong> {{ activity.region }}</p>
 <p><strong>Comuna:</strong> {{ activity.commune }}</p>
-<p><strong>Sector:</strong> {{ activity.sector }}</p>
 {% if activity.sector %}
 <p><strong>Sector:</strong> {{ activity.sector }}</p>
 {% endif %}
 
 <h3>Quien?</h3>
-
 <p><strong>Organizador:</strong> {{ activity.name }}</p>
 <p><strong>Email:</strong> {{ activity.email }}</p>
+{% if activity.phone %}
 <p><strong>Telefono:</strong> {{ activity.phone }}</p>
-
+{% endif %}
 {% if activity.contacts %}
 <p><strong>Contactos:</strong></p>
-{% for contact in activity.contacts %}
-<p><strong>{{ contact.name }}: </strong> {{ contact.id }}</p>
-{% endfor %}
+<ul>
+  {% for contact in activity.contacts %}
+  <li><strong>{{ contact.name }}:</strong> {{ contact.id }}</p>
+    {% endfor %}
+</ul>
 {% endif %}
 
 <h3>Cuando?</h3>
 
 <p><strong>Inicio:</strong> {{ activity.start }}</p>
+{% if activity.end %}
 <p><strong>Termino:</strong> {{ activity.end }}</p>
+{% endif %}
 
 <h3>Que?</h3>
 
@@ -40,20 +44,17 @@
 {% endif %}
 
 
-{% if activity.photo %}
-<strong>Foto:</strong></p>
-<img src="{{ url_for('static', filename=activity.photo) }}" alt="Foto" class="small-image">
-{% endif %}
 <strong>Fotos:</strong></p>
-{% for foto in activity.photos %}
-<img class="clickable" src="{{ url_for('static', filename=foto) }}" alt="Foto {{ loop.index }}" class="small-image"
-  onclick="document.getElementById('image-preview').showModal();">
-{% endfor %}
-</p>
+<figure>
+  {% for photo in activity.photos %}
+  <img class="clickable" src="{{ photo }}" alt="Foto {{ loop.index }}" class="small-image"
+    onclick="document.getElementById('image-preview').showModal();">
+  {% endfor %}
+</figure>
 
 
 <dialog id="image-preview">
-  <img src="images/activity0.webp" alt="Foto" class="large-image">
+  <img src="{{ photo }}" alt="Foto" class="large-image">
   <button id="image-preview" onclick="document.getElementById('image-preview').close();">Close</button>
 </dialog>
 
