@@ -5,7 +5,8 @@ import bleach
 import os
 from datetime import datetime
 
-UPLOAD_FOLDER = 'app/static/uploads'
+
+UPLOAD_FOLDER = 'static/uploads'
 
 app = Flask(__name__)
 
@@ -174,14 +175,12 @@ def agregar():
             fotos = photos,
         )
 
-        print(photo_paths)
-        if not os.path.exists(base_path):
-            os.makedirs(base_path)
+        path = os.path.join(os.path("app/"), str(base_path))
+        if not os.path.exists(path):
+            os.makedirs(path)
         for photo, photo_path in zip(photos, photo_paths):
-            print(photo)
-            print(photo_path)
-            photo.save(photo_path)
-            print(f"saved? {photo_path}")
+            photo.save(os.path.join(os.path("app/"), photo_path))
+
 
         return redirect(url_for('listado'))
                         
