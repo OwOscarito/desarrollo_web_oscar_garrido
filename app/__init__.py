@@ -45,8 +45,11 @@ def agregar():
 
         if not validate.valid_location(region, commune):
             error_list.append("Ubicación inválida")
-        if not validate.valid_sector(sector):
-            error_list.append("Sector inválido")
+        if sector:
+            if not validate.valid_sector(sector):
+                error_list.append("Sector inválido")
+        else:
+            sector = None
 
         # Who
         name = sanitize_input(request.form.get('name'))
@@ -82,8 +85,11 @@ def agregar():
             error_list.append("Nombre inválido")
         if not validate.valid_email(email):
             error_list.append("Email inválido")
-        if not validate.valid_phone(phone):
-            error_list.append("Teléfono inválido")
+        if phone:
+            if not validate.valid_phone(phone):
+                error_list.append("Teléfono inválido")
+        else:
+            phone = None
 
         for i in range(len(contact_checks)):
             if not contact_checks[i]:
@@ -93,11 +99,16 @@ def agregar():
 
         # When 
         start_date = request.form.get('start-datetime')
+        end_checkbox = request.form.get('end-checkbox')
         end_date = request.form.get('end-datetime')
+
         if not validate.valid_date(start_date):
             error_list.append("Fecha de inicio inválida")
-        if not validate.valid_end_date(start_date, end_date):
-            error_list.append("Fecha de término inválida")
+        if end_checkbox == "on":
+            if not validate.valid_end_date(start_date, end_date):
+                error_list.append("Fecha de término inválida")
+        else:
+            end_date = None
 
         print(f"when: {start_date}, {end_date}")
 
@@ -108,8 +119,14 @@ def agregar():
         description = request.form.get('description')
         print(f"what: {topic}, {other_topic}, {description}")
 
-        if not validate.valid_topic(topic, other_topic):
-            error_list.append("Tema inválido")
+        if topic != "otro":
+            other_topic = None
+            if not validate.valid_topic(topic):
+                error_list.append("Tema inválido")
+        else:
+            if not validate.valid_other_topic(topic, other_topic):
+                error_list.append("Tema inválido")
+        
         if not validate.valid_description(description):
             error_list.append("Descripción inválida")
 

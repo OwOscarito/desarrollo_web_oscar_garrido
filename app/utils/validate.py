@@ -58,7 +58,7 @@ def valid_date(date):
     if not date:
         return False
     try:
-        date = datetime.strptime(date, '%Y-%m-%d')
+        date = datetime.strptime(date, '%Y-%m-%dT%H:%M')
     except ValueError:
         return False
     return True
@@ -84,14 +84,17 @@ def valid_description(description):
 
     return valid_string(description, 0, DESCRIPTION_LENGTH)
 
-def valid_topic(topic, other_topic):
+def valid_other_topic(topic, other_topic):
     if not topic:
         return False
-    print(f"topic: {topic}, other_topic: {other_topic}")
-    print(f"db.Tema.__members__: {db.Tema.__members__}")
     if topic == "otro" and (not other_topic or not valid_string(other_topic, 3, 15)):
         return False
-    elif topic not in db.Tema.__members__:
+    return True
+
+def valid_topic(topic):
+    if not topic:
+        return False
+    if topic not in db.Tema.__members__:
         return False
     return True
 
