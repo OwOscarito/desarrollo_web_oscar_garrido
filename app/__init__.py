@@ -52,21 +52,29 @@ def agregar():
         name = sanitize_input(request.form.get('name'))
         email = request.form.get('email')
         phone = request.form.get('phone')
+        CONTACTS = [
+            "whatsapp",
+            "instagram",
+            "telegram",
+            "tiktok",
+            "x",
+            "otro"
+        ]
         contact_checks = [
-            request.form.get('whatsapp'),
-            request.form.get('instagram'),
-            request.form.get('telegram'),
-            request.form.get('tiktok'),
-            request.form.get('x'),
-            request.form.get('otro')
+            request.form.get(CONTACTS[0]),
+            request.form.get(CONTACTS[1]),
+            request.form.get(CONTACTS[2]),
+            request.form.get(CONTACTS[3]),
+            request.form.get(CONTACTS[4]),
+            request.form.get(CONTACTS[5])
         ]
         contact_ids = [
-            sanitize_input(request.form.get('whatsapp-id')),
-            sanitize_input(request.form.get('instagram-id')),
-            sanitize_input(request.form.get('telegram-id')),
-            sanitize_input(request.form.get('tiktok-id')),
-            sanitize_input(request.form.get('x-id')),
-            sanitize_input(request.form.get('otro-id'))
+            sanitize_input(request.form.get(f'{CONTACTS[0]}-id')),
+            sanitize_input(request.form.get(f'{CONTACTS[1]}-id')),
+            sanitize_input(request.form.get(f'{CONTACTS[2]}-id')),
+            sanitize_input(request.form.get(f'{CONTACTS[3]}-id')),
+            sanitize_input(request.form.get(f'{CONTACTS[4]}-id')),
+            sanitize_input(request.form.get(f'{CONTACTS[5]}-id')),
         ]
         print(f'who: {name}, {email}, {phone}, {contact_checks}, {contact_ids}')
 
@@ -80,7 +88,7 @@ def agregar():
         for i in range(len(contact_checks)):
             if not contact_checks[i]:
                 contact_ids[i] = None
-            elif contact_checks[i] == "on" and not validate.valid_contact(contact_checks[i], contact_ids[i]):
+            elif contact_checks[i] == "on" and not validate.valid_contact(contact_ids[i]):
                 error_list.append("Contacto inválido")
 
         # When 

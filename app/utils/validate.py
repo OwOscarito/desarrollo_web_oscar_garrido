@@ -49,9 +49,7 @@ def valid_phone(phone):
         return False
     return re.match(PHONE_REGEX, phone)
 
-def valid_contact(contact_type, contact_id):
-    if contact_type not in db.Contacto:
-        return False
+def valid_contact(contact_id):
     if not valid_string(contact_id, 4, 50):
         return False
     return True
