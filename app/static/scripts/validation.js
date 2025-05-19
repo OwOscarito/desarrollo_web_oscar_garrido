@@ -137,7 +137,7 @@ const validateWhen = () => {
   }
 
   const startDate = document.getElementById("start-datetime").value;
-  const endCheckbox = document.getElementById("end-checkbox").value;
+  const endCheckbox = document.getElementById("end-checkbox").checked;
   const endDate = document.getElementById("end-datetime").value;
 
   if (!validateDate(startDate)) {

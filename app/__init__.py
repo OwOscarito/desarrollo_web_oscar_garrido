@@ -116,17 +116,19 @@ def agregar():
 
         # What
         topic = request.form.get('select-topic').lower()
-        other_topic = sanitize_input(request.form.get('other_topic'))
+        other_topic = sanitize_input(request.form.get('other-topic'))
         description = sanitize_input(request.form.get('description'))
         print(f"what: {topic}, {other_topic}, {description}")
 
-        if topic != "otro":
+        if topic == "otro":
+            if not validate.valid_other_topic(other_topic):
+                error_list.append("Tema inválido")
+        else:
             other_topic = None
             if not validate.valid_topic(topic):
                 error_list.append("Tema inválido")
-        else:
-            if not validate.valid_other_topic(topic, other_topic):
-                error_list.append("Tema inválido")
+     
+            
         
         if description:
             if not validate.valid_description(description):

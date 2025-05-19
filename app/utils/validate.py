@@ -41,7 +41,7 @@ def valid_email(email):
     return re.match(EMAIL_REGEX, email)
 
 def valid_phone(phone):
-    PHONE_REGEX = r'^\+?[0-9]{7,15}$'
+    PHONE_REGEX = r'/^\+\d{3}\.\d{8}$/'
 
     if not phone:
         return True
@@ -84,12 +84,8 @@ def valid_description(description):
 
     return valid_string(description, 0, DESCRIPTION_LENGTH)
 
-def valid_other_topic(topic, other_topic):
-    if not topic:
-        return False
-    if topic == "otro" and (not other_topic or not valid_string(other_topic, 3, 15)):
-        return False
-    return True
+def valid_other_topic(other_topic):
+    return valid_string(other_topic, 3, 15)
 
 def valid_topic(topic):
     if not topic:
