@@ -5,7 +5,7 @@
 {% block main %}
 
 <h2>Ultimas Actividades</h2>
-
+<div class="hcenter">
 <table id="activity-table">
   <tr>
     <th>Inicio</th>
@@ -31,12 +31,13 @@
   {% endfor %}
   {% else %}
   <tr>
-    <td colspan="6">
+    <td colspan="7">
       <p class="hcenter">No hay actividades</p>
     </td>
   </tr>
   {% endif %}
 </table>
+</div>
 
 <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
 {% endblock %}
