@@ -210,7 +210,7 @@ def actividad(id=None):
     if topic_db.tema.name == "otro":
         topic = topic_db.glosa_otro
     else:
-        topic = topic_db.tema.name
+        topic = topic_db.tema.name.capitalize()
     print(topic)
     photos_db = db.get_photos_by_activity_id(activity_db.id)
     photo_paths = [url_for('static', filename=pathlib.Path(photo.ruta_archivo).joinpath(photo.nombre_archivo).as_posix()) for photo in photos_db]
@@ -274,7 +274,7 @@ def index():
         if db_topic.tema.name == "otro":
             topic = db_topic.glosa_otro
         else:
-            topic = db_topic.tema.name
+            topic = db_topic.tema.name.capitalize()
 
         activities.append({
             'id': activity.id,
