@@ -116,8 +116,8 @@ def agregar():
 
         # What
         topic = request.form.get('select-topic').lower()
-        other_topic = request.form.get('other_topic')
-        description = request.form.get('description')
+        other_topic = sanitize_input(request.form.get('other_topic'))
+        description = sanitize_input(request.form.get('description'))
         print(f"what: {topic}, {other_topic}, {description}")
 
         if topic != "otro":
@@ -128,8 +128,12 @@ def agregar():
             if not validate.valid_other_topic(topic, other_topic):
                 error_list.append("Tema inválido")
         
-        if not validate.valid_description(description):
-            error_list.append("Descripción inválida")
+        if description:
+            if not validate.valid_description(description):
+                error_list.append("Descripción inválida")
+        else:
+            description = None
+
 
         # Files
         photos = [
@@ -172,7 +176,7 @@ def agregar():
         for photo, db_photo in zip(photos, db_photos):
             if photo and db_photo:
                 path = os.path.join(db_photo.ruta_archivo, db_photo.nombre_archivo)
-                if not os.path.exists(path):
+                if not os.path.exists(db_photo.ruta_archivo):
                     os.makedirs(path)
                 photo.save(path)
 
@@ -194,24 +198,35 @@ def actividad(id=None):
 
 @app.route('/listado',methods=["GET"])
 def listado():
-    actividades = []
-    #for actividad in db.get_activities(5):
-    #    actividades.append(actividad)
-    return render_template('listado-actividades.html', actividades=actividades)
+    activities = []
+    for activity in db.get_activities(5):
+        photos = db.get_photos_by_activity_id(activity.id)
+        print(photos)
+        activities.append({
+            'id': activity.id,
+            'start': activity.dia_hora_inicio,
+            'end': activity.dia_hora_termino,
+            'commune': db.get_commune_by_id(activity.comuna_id).nombre,
+            'sector': activity.sector,
+            'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
+        })
+    return render_template('listado-actividades.html', activities=activities)
 
 @app.route('/',methods=["GET"])
 def index():
-    actividades = []
-    for actividad in db.get_activities(5):
-        actividades.append({
-            'id': actividad.id,
-            'start': actividad.fecha_inicio,
-            'end': actividad.fecha_fin,
-            'commune': actividad.comuna,
-            'sector': actividad.sector,
-            'photo': actividad.foto,
+    activities = []
+    for activity in db.get_activities(5):
+        photos = db.get_photos_by_activity_id(activity.id)
+        activities.append({
+            'id': activity.id,
+            'start': activity.dia_hora_inicio,
+            'end': activity.dia_hora_termino,
+            'commune': db.get_commune_by_id(activity.comuna_id).nombre,
+            'sector': activity.sector,
+            'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
         })
-    return render_template('index.html', actividades=actividades)
+    print(activities)
+    return render_template('index.html', activities=activities)
 
 if __name__ == "__main__":
     app.run(debug=True)

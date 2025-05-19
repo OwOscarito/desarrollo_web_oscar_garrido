@@ -209,6 +209,12 @@ def get_commune_by_id(id):
     session.close()
     return location
 
+def get_photos_by_activity_id(id):
+    session = SessionLocal()
+    photos = session.query(Foto).filter(Foto.actividad_id == id).all()
+    session.close()
+    return photos
+
 def get_count(table):
     session = SessionLocal()
     count = session.query(table.id).count()

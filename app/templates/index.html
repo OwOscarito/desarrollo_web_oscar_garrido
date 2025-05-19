@@ -17,13 +17,13 @@
     </tr>
     {% if activities %}
       {% for activity in activities %}
-      <tr class="clickable" onclick="window.location.href='{{ url_for('actividad', activity.id) }}'">
-        <td class="hcenter">{{ activity.start }}</td>
-        <td class="hcenter">{{ activity.end }}</td>
-        <td class="hcenter">{{ activity.commun }}</td>
-        <td class="hcenter">{{ activity.sector }}</td>
-        <td class="hcenter">{{ activity.topic }}</td>
-        <td class="hcenter"><img src="{{ activity.photo }}" alt="Foto"></td>
+      <tr class="clickable" onclick="window.location.href='{{ url_for('actividad') }}/{{ activity.id }}';">
+        <td>{{ activity.start }}</td>
+        <td>{{ activity.end }}</td>
+        <td>{{ activity.commune }}</td>
+        <td>{{ activity.sector }}</td>
+        <td>{{ activity.topic }}</td>
+        <td><img src="{{ activity.photo }}" class="small-image" alt="Foto"></td>
       </tr>
       {% endfor %}
     {% else %}
