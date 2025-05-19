@@ -23,6 +23,7 @@ Base = declarative_base()
 
 # --- Enums ---
 
+
 class Tema(enum.Enum):
     música = 0
     deporte = 1
@@ -156,10 +157,10 @@ def create_activity(
     
     new_contactos = []
 
-    for contacto in contactos:
+    for contacto, id in contactos:
         new_contacto = ContactarPor(
-            nombre=contacto["nombre"],
-            identificador=contacto["identificador"],
+            nombre=contacto,
+            identificador=id,
             actividad_id=new_activity.id,
         )
         new_contactos.append(new_contacto)
