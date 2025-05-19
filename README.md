@@ -1,5 +1,5 @@
 # desarrollo_web_oscar_garrido
-[http](https://github.com/OwOscarito/desarrollo_web_oscar_garrido)
+[http](https://github.com/OwOscarito/desarrollo_web_oscar_garrido/tree/Tarea_2o)
 
 ## Base de datos
 Para correr el servidor web se necesita una base de datos mysql corriendo de forma local con:

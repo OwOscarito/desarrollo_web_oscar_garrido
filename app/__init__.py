@@ -14,7 +14,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 def sanitize_input(string):
-     
     if None or not string or not isinstance(string, str):
         return string
     return bleach.clean(string)
@@ -85,8 +84,8 @@ def agregar():
                 error_list.append("Contacto inválido")
 
         # When 
-        start_date = request.form.get('start_date')
-        end_date = request.form.get('end_date')
+        start_date = request.form.get('start-datetime')
+        end_date = request.form.get('end-datetime')
         if not validate.valid_date(start_date):
             error_list.append("Fecha de inicio inválida")
         if not validate.valid_end_date(start_date, end_date):
@@ -96,7 +95,7 @@ def agregar():
 
 
         # What
-        topic = request.form.get('topic')
+        topic = request.form.get('select-topic').lower()
         other_topic = request.form.get('other_topic')
         description = request.form.get('description')
         print(f"what: {topic}, {other_topic}, {description}")

@@ -1,6 +1,6 @@
 import re
 import filetype
-import datetime
+from datetime import datetime
 from app.database import db
 
 # Generic string validator
@@ -69,8 +69,8 @@ def valid_end_date(start_date, end_date):
     if not start_date or not end_date:
         return False
     try:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d %H:%M')
-        end_date = datetime.strptime(end_date, '%Y-%m-%d %H:%M')
+        start_date = datetime.strptime(start_date, '%Y-%m-%dT%H:%M')
+        end_date = datetime.strptime(end_date, '%Y-%m-%dT%H:%M')
     except ValueError:
         return False
     if start_date > end_date:
@@ -89,9 +89,11 @@ def valid_description(description):
 def valid_topic(topic, other_topic):
     if not topic:
         return False
+    print(f"topic: {topic}, other_topic: {other_topic}")
+    print(f"db.Tema.__members__: {db.Tema.__members__}")
     if topic == "otro" and (not other_topic or not valid_string(other_topic, 3, 15)):
         return False
-    elif topic not in db.Tema:
+    elif topic not in db.Tema.__members__:
         return False
     return True
 
