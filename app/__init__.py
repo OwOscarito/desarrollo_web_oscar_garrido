@@ -99,9 +99,9 @@ def agregar():
                 error_list.append("Contacto inválido")
 
         # When 
-        start_date = request.form.get('start-datetime')
+        start_date = request.form.get('start-datetime-input')
         end_checkbox = request.form.get('end-checkbox')
-        end_date = request.form.get('end-datetime')
+        end_date = request.form.get('end-datetime-input')
 
         if not validate.valid_date(start_date):
             error_list.append("Fecha de inicio inválida")
