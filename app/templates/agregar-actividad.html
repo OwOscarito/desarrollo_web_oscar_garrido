@@ -5,84 +5,90 @@
 {% block main %}
 <h2>Agregar Actividad</h2>
 {% if error %}
-  <p class="notice error">Error en el formulario: {{ error }}</p>
+<p class="notice error">Error en el formulario: {{ error }}</p>
 {% endif %}
 <form name="activity-form" id="activity-form" method="post" enctype="multipart/form-data">
   <article>
-  <h3>¿Donde?</h3>
-  <label for="select-region">Region:</label>
-  <select name="select-region" id="select-region" required>
-    <option value="">Seleccione una region</option>
-  </select>
-  
-  <label for="select-commune">Comuna:</label>
-  <select name="select-commune" id="select-commune" required>
-    <option value="">Seleccione una comuna</option>
-  </select>
+    <h3>¿Donde?</h3>
+    <label for="select-region">Region:</label>
+    <select name="select-region" id="select-region" required>
+      <option value="">Seleccione una region</option>
+    </select>
 
-  <label for="sector">Sector:</label>
-  <input type="text" name="sector" id="sector" maxlength="100" required>
+    <label for="select-commune">Comuna:</label>
+    <select name="select-commune" id="select-commune" required>
+      <option value="">Seleccione una comuna</option>
+    </select>
+
+    <label for="sector">Sector:</label>
+    <input type="text" name="sector" id="sector" maxlength="100" required>
   </article>
 
   <article>
-  <h3>¿Quien Organiza?</h3>
-  <label for="name">Nombre</label>
-  <input type="text" name="name" id="name" maxlength="200" required>
+    <h3>¿Quien Organiza?</h3>
+    <label for="name">Nombre</label>
+    <input type="text" name="name" id="name" maxlength="200" required>
 
-  <label for="email">Email</label>
-  <input type="email" name="email" id="email" maxlength="100" required>
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" maxlength="100" required>
 
-  <label for="phone">Telefono</label>
-  <input type="tel" name="phone" id="phone" minlength="14" maxlength="14">
+    <label for="phone">Telefono</label>
+    <input type="tel" name="phone" id="phone" minlength="14" maxlength="14">
 
-  <label for="contactos">Contacto</label>
-  <ul name="contactos">
-    <li><input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
-    <input id="whatsapp" type="text" name="whatsapp-id" style="display: none"></li>
+    <label for="contactos">Contacto</label>
+    <ul name="contactos">
+      <li><input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
+        <input id="whatsapp" type="text" name="whatsapp-id" style="display: none">
+      </li>
 
-    <li><input type="checkbox" name="instagram" onclick="updateInput(this);">Instagram
-    <input id="instagram" type="text" name="instagram-id" style="display: none"></li>
+      <li><input type="checkbox" name="instagram" onclick="updateInput(this);">Instagram
+        <input id="instagram" type="text" name="instagram-id" style="display: none">
+      </li>
 
-    <li><input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
-    <input id="telegram" type="text" name="telegram-id" style="display: none"></li>
+      <li><input type="checkbox" name="telegram" onclick="updateInput(this);">Telegram
+        <input id="telegram" type="text" name="telegram-id" style="display: none">
+      </li>
 
-    <li><input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
-    <input id="tiktok" type="text" name="tiktok-id" style="display: none"></li>
+      <li><input type="checkbox" name="tiktok" onclick="updateInput(this);">Tiktok
+        <input id="tiktok" type="text" name="tiktok-id" style="display: none">
+      </li>
 
-    <li><input type="checkbox" name="x" onclick="updateInput(this);">X
-    <input id="x" type="text" name="x-id" style="display: none"></li>
+      <li><input type="checkbox" name="x" onclick="updateInput(this);">X
+        <input id="x" type="text" name="x-id" style="display: none">
+      </li>
 
-    <li><input type="checkbox" name="other" onclick="updateInput(this);">Otra
-    <input id="other" type="text" name="other-id" style="display: none"></li>
-  </ul>
+      <li><input type="checkbox" name="other" onclick="updateInput(this);">Otra
+        <input id="other" type="text" name="other-id" style="display: none">
+      </li>
+    </ul>
   </article>
 
   <article>
-  <h3>¿Cuando y de que se trata?</h3>
+    <h3>¿Cuando y de que se trata?</h3>
 
-  <label for="start-datetime">Fecha y Hora de Inicio</label>
-  <input type="datetime-local" name="start-datetime-input" id="start-datetime" required>
-  <br>
-  <input type="checkbox" name="end-datetime" id="end-checkbox" onclick="updateInput(this);">Fecha y Hora de
-  Termino
-  <input type="datetime-local" name="end-datetime-input" id="end-datetime" style="display: none">
+    <label for="start-datetime">Fecha y Hora de Inicio</label>
+    <input type="datetime-local" name="start-datetime-input" id="start-datetime" required>
+    <br>
+    <input type="checkbox" name="end-datetime" id="end-checkbox" onclick="updateInput(this);">Fecha y Hora de
+    Termino
+    <input type="datetime-local" name="end-datetime-input" id="end-datetime" style="display: none">
 
-  <label for="select-topic">Tema</label>
-  <select name="select-topic" id="select-topic" required>
-    <option value="">Seleccione una tema</option>
-  </select>
-  <input id="other-topic" type="text" name="other-topic" maxlength="15" style="display: none">
+    <label for="select-topic">Tema</label>
+    <select name="select-topic" id="select-topic" required>
+      <option value="">Seleccione una tema</option>
+    </select>
+    <input id="other-topic" type="text" name="other-topic" maxlength="15" style="display: none">
 
-  <label for="description">Descripcion</label>
-  <textarea name="description" id="description" rows="10" cols="50" maxlength="500"></textarea>
+    <label for="description">Descripcion</label>
+    <textarea name="description" id="description" rows="10" cols="50" maxlength="500"></textarea>
 
-  <label for="photo">Fotos</label>
+    <label for="photo">Fotos</label>
 
-  <input type="file" onclick="this.value = null" name="photo0" id="photo0" accept="image/*" required>
-  <input type="file" onclick="this.value = null" name="photo1" id="photo1" accept="image/*" style="display: none">
-  <input type="file" onclick="this.value = null" name="photo2" id="photo2" accept="image/*" style="display: none">
-  <input type="file" onclick="this.value = null" name="photo3" id="photo3" accept="image/*" style="display: none">
-  <input type="file" name="photo4" id="photo4" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null" name="photo0" id="photo0" accept="image/*" required>
+    <input type="file" onclick="this.value = null" name="photo1" id="photo1" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null" name="photo2" id="photo2" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null" name="photo3" id="photo3" accept="image/*" style="display: none">
+    <input type="file" name="photo4" id="photo4" accept="image/*" style="display: none">
   </article>
 
   <!--
@@ -94,19 +100,19 @@
     <img id="preview4" src="" alt="Preview" style="display: none">
   </figure>
   -->
-  <div class="hcenter">
-    <a class="button" id="submit-btn">Crear Actividad</a>
-    <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
-  </div>
+
+  <a class="button" id="submit-btn">Crear Actividad</a>
+  <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
+
 </form>
 
 <dialog id="confirm-dialog">
   <h4>Confimacion</h4>
   <p>¿Esta seguro de que desea agregar esta actividad?</p>
-  <div class="hcenter">
-    <button id="confirm-btn">Si, estoy seguro</button>
-    <button id="cancel-btn">No, no estoy seguro</button>
-  </div>
+
+  <button id="confirm-btn">Si, estoy seguro</button>
+  <button id="cancel-btn">No, no estoy seguro</button>
+
 </dialog>
 {% endblock %}
 

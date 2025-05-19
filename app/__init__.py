@@ -5,7 +5,7 @@ import bleach
 import os
 from datetime import datetime
 
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = 'app/static/uploads'
 
 app = Flask(__name__)
 
@@ -158,7 +158,7 @@ def agregar():
 
         print("no error")
 
-        db_objects = db.create_activity(
+        base_path, photo_paths = db.create_activity(
             comuna_id=commune,
             nombre=name,
             email=email,
@@ -173,14 +173,15 @@ def agregar():
             contactos = [contact for contact in zip(CONTACTS, contact_ids) if contact[1]],
             fotos = photos,
         )
-        
-        db_photos:list[db.Foto] = db_objects["fotos"]
-        for photo, db_photo in zip(photos, db_photos):
-            if photo and db_photo:
-                path = os.path.join(db_photo.ruta_archivo, db_photo.nombre_archivo)
-                if not os.path.exists(db_photo.ruta_archivo):
-                    os.makedirs(path)
-                photo.save(path)
+
+        print(photo_paths)
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
+        for photo, photo_path in zip(photos, photo_paths):
+            print(photo)
+            print(photo_path)
+            photo.save(photo_path)
+            print(f"saved? {photo_path}")
 
         return redirect(url_for('listado'))
                         
@@ -193,17 +194,16 @@ def actividad(id=None):
     if not id:
         return redirect(url_for('listado'))
     
-    actividad = db.get_activity_by_id(id)
-    if not actividad:
+    activity = db.get_activity_by_id(id)
+    if not activity:
         return redirect(url_for('listado'))
-    return render_template('informacion-actividad.html', actividad=actividad)
+    return render_template('informacion-actividad.html', activity=activity)
 
 @app.route('/listado',methods=["GET"])
 def listado():
     activities = []
-    for activity in db.get_activities(5):
+    for activity in db.get_last_activities(5):
         photos = db.get_photos_by_activity_id(activity.id)
-        print(photos)
         activities.append({
             'id': activity.id,
             'start': activity.dia_hora_inicio,
@@ -212,19 +212,30 @@ def listado():
             'sector': activity.sector,
             'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
         })
+    print(activities)
     return render_template('listado-actividades.html', activities=activities)
 
 @app.route('/',methods=["GET"])
 def index():
     activities = []
-    for activity in db.get_activities(5):
+    for activity in db.get_last_activities(5):
         photos = db.get_photos_by_activity_id(activity.id)
+        dt_end = activity.dia_hora_termino
+        if not dt_end:
+            dt_end = ""
+        db_topic = db.get_topic_by_activity_id(activity.id)[0]
+        if db_topic.tema == "otro":
+            topic = db_topic.glosa_otro
+        else:
+            topic = db_topic.tema
+
         activities.append({
             'id': activity.id,
             'start': activity.dia_hora_inicio,
-            'end': activity.dia_hora_termino,
+            'end': dt_end,
             'commune': db.get_commune_by_id(activity.comuna_id).nombre,
             'sector': activity.sector,
+            'tema': topic,
             'photo': os.path.join(photos[0].ruta_archivo, photos[0].nombre_archivo)
         })
     print(activities)

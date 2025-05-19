@@ -167,13 +167,16 @@ def create_activity(
 
 
     new_fotos = []
-    base_path = os.path.join(uploads_folder, str(new_activity.id))
+    photo_paths = []
+    base_path = uploads_folder + "/" + str(new_activity.id)
     for foto in fotos:
+        filename = secure_filename(foto.filename)
         new_foto = Foto(
             ruta_archivo=base_path,
-            nombre_archivo=secure_filename(foto.filename),
+            nombre_archivo=filename,
             actividad_id=new_activity.id,
         )
+        photo_paths.append(os.path.join(base_path, filename))
         new_fotos.append(new_foto)
 
     session.add(new_tema)
@@ -184,11 +187,11 @@ def create_activity(
     session.commit()
     session.close()
 
-    return {"activity": new_activity, "tema": new_tema, "contactos": new_contactos, "fotos": new_fotos}
+    return base_path, photo_paths
             
-def get_activities(quantity=1, offset=0):
+def get_last_activities(quantity=1, offset=0):
     session = SessionLocal()
-    activities = session.query(Actividad).offset(offset).limit(quantity).all()
+    activities = session.query(Actividad).order_by(Actividad.id.desc()).offset(offset).limit(quantity).all()
     session.close()
     return activities
 
@@ -215,6 +218,12 @@ def get_photos_by_activity_id(id):
     photos = session.query(Foto).filter(Foto.actividad_id == id).all()
     session.close()
     return photos
+
+def get_topic_by_activity_id(id):
+    session = SessionLocal()
+    topic = session.query(ActividadTema).filter(ActividadTema.actividad_id == id).all()
+    session.close()
+    return topic
 
 def get_count(table):
     session = SessionLocal()

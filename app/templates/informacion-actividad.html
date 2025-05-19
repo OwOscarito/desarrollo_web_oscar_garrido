@@ -3,55 +3,54 @@
 {% block title %}Actividad{% endblock %}
 
 {% block main %}
-<div class="center">
-  <h2>Informacion Actividad</h2>
 
-  <h3>Donde?</h3>
-  <p>
-    <strong>Comuna:</strong> {{ activity.commune }}<br>
-    <strong>Sector:</strong> {{ activity.sector }}<br>
-    {% if activity.sector %}
-    <strong>Sector:</strong> {{ activity.sector }}<br>
-    {% endif %}
-  </p>
-  <h3>Quien?</h3>
-  <p>
-    <strong>Organizador:</strong> {{ activity.name }}<br>
-    <strong>Email:</strong> {{ activity.email }}<br>
-    <strong>Telefono:</strong> {{ activity.phone }}<br>
+<h2>Informacion Actividad</h2>
 
-    {% if activity.contacts %}
-    <strong>Contactos:</strong><br>
-    {% for contact in activity.contacts %}
-    <strong>{{ contact.name }}: </strong> {{ contact.id }}<br>
-    {% endfor %}
-    {% endif %}
-  </p>
-  <h3>Cuando?</h3>
-  <p>
-    <strong>Inicio:</strong> {{ activity.start }}<br>
-    <strong>Termino:</strong> {{ activity.end }}<br>
+<h3>Donde?</h3>
 
-  </p>
-  <h3>Que?</h3>
-  <p>
-    <strong>Tema:</strong> {{ activity.topic }}<br>
-    {% if activity.description %}
-    <strong>Descripcion:</strong> {{ activity.description }}<br>
-    {% endif %}
-  </p>
+<p><strong>Comuna:</strong> {{ activity.commune }}</p>
+<p><strong>Sector:</strong> {{ activity.sector }}</p>
+{% if activity.sector %}
+<p><strong>Sector:</strong> {{ activity.sector }}</p>
+{% endif %}
 
-  {% if activity.photo %}
-  <strong>Foto:</strong><br>
-  <img src="{{ url_for('static', filename=activity.photo) }}" alt="Foto" class="small-image">
-  {% endif %}
-  <strong>Fotos:</strong><br>
-  {% for foto in activity.photos %}
-  <img class="clickable" src="{{ url_for('static', filename=foto) }}" alt="Foto {{ loop.index }}" class="small-image"
-    onclick="document.getElementById('image-preview').showModal();">
-  {% endfor %}
-  </p>
-</div>
+<h3>Quien?</h3>
+
+<p><strong>Organizador:</strong> {{ activity.name }}</p>
+<p><strong>Email:</strong> {{ activity.email }}</p>
+<p><strong>Telefono:</strong> {{ activity.phone }}</p>
+
+{% if activity.contacts %}
+<p><strong>Contactos:</strong></p>
+{% for contact in activity.contacts %}
+<p><strong>{{ contact.name }}: </strong> {{ contact.id }}</p>
+{% endfor %}
+{% endif %}
+
+<h3>Cuando?</h3>
+
+<p><strong>Inicio:</strong> {{ activity.start }}</p>
+<p><strong>Termino:</strong> {{ activity.end }}</p>
+
+<h3>Que?</h3>
+
+<p></p><strong>Tema:</strong> {{ activity.topic }}</p>
+{% if activity.description %}
+<p></p><strong>Descripcion:</strong> {{ activity.description }}</p>
+{% endif %}
+
+
+{% if activity.photo %}
+<strong>Foto:</strong></p>
+<img src="{{ url_for('static', filename=activity.photo) }}" alt="Foto" class="small-image">
+{% endif %}
+<strong>Fotos:</strong></p>
+{% for foto in activity.photos %}
+<img class="clickable" src="{{ url_for('static', filename=foto) }}" alt="Foto {{ loop.index }}" class="small-image"
+  onclick="document.getElementById('image-preview').showModal();">
+{% endfor %}
+</p>
+
 
 <dialog id="image-preview">
   <img src="images/activity0.webp" alt="Foto" class="large-image">
