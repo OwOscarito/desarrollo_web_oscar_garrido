@@ -84,10 +84,10 @@
 
     <label for="photo">Fotos</label>
 
-    <input type="file" onclick="this.value = null" name="photo0" id="photo0" accept="image/*" required>
-    <input type="file" onclick="this.value = null" name="photo1" id="photo1" accept="image/*" style="display: none">
-    <input type="file" onclick="this.value = null" name="photo2" id="photo2" accept="image/*" style="display: none">
-    <input type="file" onclick="this.value = null" name="photo3" id="photo3" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo1');" name="photo0" id="photo0" accept="image/*" required>
+    <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo2');" name="photo1" id="photo1" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo3');" name="photo2" id="photo2" accept="image/*" style="display: none">
+    <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo4');" name="photo3" id="photo3" accept="image/*" style="display: none">
     <input type="file" name="photo4" id="photo4" accept="image/*" style="display: none">
   </article>
 

@@ -59,16 +59,23 @@ const updateOtherTopic = () => {
   }
 };
 
-const updatePhoto = (photoInputId, nextPhotoInputId) => {
+function updatePhoto(elem, nextPhotoInputId) {
   const nextPhotoInput = document.getElementById(nextPhotoInputId);
-  const photoInput = document.getElementById(photoInputId);
-  const photo = photoInput.files[0];
-  if (photo) {
+  if (elem.files.length > 0) {
     nextPhotoInput.style.display = "block";
   } else {
     nextPhotoInput.style.display = "none";
   }
 }
+
+function updateInput(element){
+    if (element.checked) {
+      document.getElementById(element.name).style.display = "block";
+    } else {
+       document.getElementById(element.name).style.display = "none";
+    }
+}
+
 
 document
   .getElementById("select-region")
@@ -97,22 +104,6 @@ document
   .addEventListener("click", function (event) {
     document.getElementById("confirm-dialog").close();
   });
-
-document
-  .getElementById("photo0")
-  .addEventListener("change", updatePhoto("photo0", "photo1"));
-
-document
-  .getElementById("photo1")
-  .addEventListener("change", updatePhoto("photo1", "photo2"));
-
-document
-  .getElementById("photo2")
-  .addEventListener("change", updatePhoto("photo2", "photo3"));
-
-document
-  .getElementById("photo3")
-  .addEventListener("change", updatePhoto("photo3", "photo4"));
 
 window.onload = () => {
   populateRegions();
