@@ -21,8 +21,8 @@ def execute_sql_file(session, file: str):
                         session.execute(text(sql_command))
                         session.commit()
                     # Assert in case of error
-                    except:
-                        print("Error executing SQL command:", sql_command)
+                    except Exception as e:
+                        print(f"Error {e} executing SQL command: {sql_command}")
                     # Finally, clear command string
                     finally:
                         sql_command = ""
