@@ -2,41 +2,42 @@ from sqlalchemy import text
 from db import Base, engine, SessionLocal, get_count, Comuna, Region
 from argparse import ArgumentParser
 
+
 def execute_sql_file(session, file: str):
+    with open(file, "r") as sql_file:
 
-    sql_file = open(file,'r')
+        sql_command = ""
 
-    sql_command = ''
+        for line in sql_file:
+            # Ignore commented lines
+            if not line.startswith("--") and line.strip("\n"):
+                # Append line to the command string
+                sql_command += line.strip("\n")
 
-    for line in sql_file:
-        # Ignore commented lines
-        if not line.startswith('--') and line.strip('\n'):
-            # Append line to the command string
-            sql_command += line.strip('\n')
+                # If the command string ends with ';', it is a full statement
+                if sql_command.endswith(";"):
+                    # Try to execute statement and commit it
+                    try:
+                        session.execute(text(sql_command))
+                        session.commit()
+                    # Assert in case of error
+                    except:
+                        print("Error executing SQL command:", sql_command)
+                    # Finally, clear command string
+                    finally:
+                        sql_command = ""
 
-            # If the command string ends with ';', it is a full statement
-            if sql_command.endswith(';'):
-                # Try to execute statement and commit it
-                try:
-                    session.execute(text(sql_command))
-                    session.commit()
-                # Assert in case of error
-                except:
-                    print('Error executing SQL command:', sql_command)
-                # Finally, clear command string
-                finally:
-                    sql_command = ''
-
-    sql_file.close()
 
 def init_tables():
     session = SessionLocal()
-    execute_sql_file(session, 'app/database/tarea2.sql')
+    execute_sql_file(session, "app/database/tarea2.sql")
+    execute_sql_file(session, "app/database/tabla-comentario.sql")
     session.commit()
+
 
 def init_region_comuna():
     session = SessionLocal()
-    execute_sql_file(session, 'app/database/region-comuna.sql')
+    execute_sql_file(session, "app/database/region-comuna.sql")
     session.commit()
 
 
@@ -51,6 +52,7 @@ def drop_db():
 
     print("¡Tablas eliminadas!")
 
+
 def init_db():
     REGION_COUNT = 16
     COMUNA_COUNT = 345
@@ -58,10 +60,10 @@ def init_db():
     init_tables()
     print("¡Tablas creadas!")
 
-    if (get_count(Comuna) < REGION_COUNT 
-        or get_count(Region) < COMUNA_COUNT):
+    if get_count(Comuna) < REGION_COUNT or get_count(Region) < COMUNA_COUNT:
         init_region_comuna()
         print("¡Regiones y comunas inicializadas!")
+
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Initialize or drop the database.")

@@ -1,9 +1,18 @@
 from __future__ import annotations
 import enum
-from sqlalchemy import create_engine, Column, BigInteger, String, DateTime, Enum, ForeignKey
+from sqlalchemy import (
+    create_engine,
+    Column,
+    BigInteger,
+    String,
+    DateTime,
+    Enum,
+    ForeignKey,
+)
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from werkzeug.utils import secure_filename
 import pathlib
+
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
 DB_PASSWORD = "programacionweb"
@@ -35,6 +44,7 @@ class Tema(enum.Enum):
     comida = 8
     otro = 9
 
+
 class Contacto(enum.Enum):
     whatsapp = 0
     telegram = 1
@@ -43,7 +53,9 @@ class Contacto(enum.Enum):
     tiktok = 4
     otra = 5
 
+
 # --- Models ---
+
 
 class Region(Base):
     __tablename__ = "region"
@@ -52,6 +64,7 @@ class Region(Base):
     nombre = Column(String(200), nullable=False)
 
     comuna = relationship("Comuna", back_populates="region")
+
 
 class Comuna(Base):
     __tablename__ = "comuna"
@@ -62,6 +75,7 @@ class Comuna(Base):
 
     region = relationship("Region", back_populates="comuna")
     actividad = relationship("Actividad", back_populates="comuna")
+
 
 class Actividad(Base):
     __tablename__ = "actividad"
@@ -81,6 +95,7 @@ class Actividad(Base):
     contactar_por = relationship("ContactarPor", back_populates="actividad")
     foto = relationship("Foto", back_populates="actividad")
 
+
 class ActividadTema(Base):
     __tablename__ = "actividad_tema"
 
@@ -88,8 +103,9 @@ class ActividadTema(Base):
     tema = Column(Enum(Tema))
     glosa_otro = Column(String(15), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
-    
+
     actividad = relationship("Actividad", back_populates="actividad_tema")
+
 
 class ContactarPor(Base):
     __tablename__ = "contactar_por"
@@ -98,8 +114,9 @@ class ContactarPor(Base):
     nombre = Column(Enum(Contacto), nullable=False)
     identificador = Column(String(150), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
-    
+
     actividad = relationship("Actividad", back_populates="contactar_por")
+
 
 class Foto(Base):
     __tablename__ = "foto"
@@ -108,10 +125,24 @@ class Foto(Base):
     ruta_archivo = Column(String(300), nullable=False)
     nombre_archivo = Column(String(300), nullable=False)
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
-    
+
     actividad = relationship("Actividad", back_populates="foto")
 
+class Comentario(Base):
+    __tablename__ = "comentario"
+
+    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    nombre = Column(String(80), nullable=False)
+    texto = Column(String(300), nullable=False)
+    fecha = Column(DateTime, nullable=False)
+    actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
+
+    actividad = relationship("Actividad", back_populates="comentario")
+
+
+
 # --- Functions ---
+
 
 def create_activity(
     comuna_id,
@@ -127,7 +158,6 @@ def create_activity(
     glosa_otro=None,
     contactos: list = [],
     fotos: list = [],
-
 ):
     session = SessionLocal()
     new_activity = Actividad(
@@ -144,18 +174,12 @@ def create_activity(
     session.flush()
 
     activity_id = new_activity.id
-    new_tema = ActividadTema(
-        tema=tema, 
-        glosa_otro=glosa_otro,
-        actividad_id=activity_id
-    )
+    new_tema = ActividadTema(tema=tema, glosa_otro=glosa_otro, actividad_id=activity_id)
     print(contactos)
     new_contactos = []
     for name, id in contactos:
         new_contacto = ContactarPor(
-            nombre=name,
-            identificador=id,
-            actividad_id=activity_id
+            nombre=name, identificador=id, actividad_id=activity_id
         )
         new_contactos.append(new_contacto)
 
@@ -164,9 +188,7 @@ def create_activity(
     for foto in fotos:
         filename = secure_filename(foto.filename)
         new_foto = Foto(
-            ruta_archivo=base_path,
-            nombre_archivo=filename,
-            actividad_id=activity_id
+            ruta_archivo=base_path, nombre_archivo=filename, actividad_id=activity_id
         )
         new_fotos.append(new_foto)
 
@@ -180,12 +202,20 @@ def create_activity(
     session.close()
 
     return base_path
-            
+
+
 def get_last_activities(quantity=1, offset=0):
     session = SessionLocal()
-    activities = session.query(Actividad).order_by(Actividad.id.desc()).offset(offset).limit(quantity).all()
+    activities = (
+        session.query(Actividad)
+        .order_by(Actividad.id.desc())
+        .offset(offset)
+        .limit(quantity)
+        .all()
+    )
     session.close()
     return activities
+
 
 def get_activity_by_id(id):
     session = SessionLocal()
@@ -193,11 +223,13 @@ def get_activity_by_id(id):
     session.close()
     return activity
 
+
 def get_region_by_id(id):
     session = SessionLocal()
     location = session.query(Region).filter(Region.id == id).first()
     session.close()
     return location
+
 
 def get_commune_by_id(id):
     session = SessionLocal()
@@ -205,23 +237,57 @@ def get_commune_by_id(id):
     session.close()
     return location
 
+
 def get_photos_by_activity_id(id):
     session = SessionLocal()
     photos = session.query(Foto).filter(Foto.actividad_id == id).all()
     session.close()
     return photos
 
+
 def get_contacts_by_activity_id(id):
     session = SessionLocal()
-    contactos = session.query(ContactarPor).filter(ContactarPor.actividad_id == id).all()
+    contactos = (
+        session.query(ContactarPor).filter(ContactarPor.actividad_id == id).all()
+    )
     session.close()
     return contactos
+
 
 def get_topic_by_activity_id(id):
     session = SessionLocal()
     topic = session.query(ActividadTema).filter(ActividadTema.actividad_id == id).all()
     session.close()
     return topic
+
+def get_comments_by_activity_id(id, offset=0, quantity=10):
+    session = SessionLocal()
+    comments = (
+        session.query(Comentario)
+        .filter(Comentario.actividad_id == id)
+        .offset(offset)
+        .limit(quantity)
+        .all()
+    )
+    session.close()
+    return comments
+
+def add_comment(
+    actividad_id,
+    nombre,
+    texto,
+    fecha,
+):
+    session = SessionLocal()
+    new_comment = Comentario(
+        actividad_id=actividad_id,
+        nombre=nombre,
+        texto=texto,
+        fecha=fecha,
+    )
+    session.add(new_comment)
+    session.commit()
+    session.close()
 
 def get_count(table):
     session = SessionLocal()
