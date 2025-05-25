@@ -94,6 +94,7 @@ class Actividad(Base):
     actividad_tema = relationship("ActividadTema", back_populates="actividad")
     contactar_por = relationship("ContactarPor", back_populates="actividad")
     foto = relationship("Foto", back_populates="actividad")
+    comentario = relationship("Comentario", back_populates="actividad")
 
 
 class ActividadTema(Base):
