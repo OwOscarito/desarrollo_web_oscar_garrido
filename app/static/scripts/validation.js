@@ -220,3 +220,27 @@ const validateWhat = () => {
 const validateForm = () => {
   return validateWhere() && validateWho() && validateWhen() && validateWhat();
 }
+
+const validateComment = () => {
+  const validateName = (name) => {
+    return validateLenght(name, 3, 80);
+  }
+  const validateText = (comment) => {
+    COLUMNS = 50;
+    ROWS = 4;
+    const maxLength = COLUMNS * ROWS;
+    return validateLenght(comment, 5, maxLength);
+  }
+  const name = document.getElementById("name").value;
+  const comment = document.getElementById("comment").value;
+
+  if (!validateName(name)) {
+    alert("Ingrese un nombre válido.");
+    return false;
+  }
+  if (!validateText(comment)) {
+    alert("Ingrese un comentario válido.");
+    return false;
+  }
+  return true;
+};

@@ -96,7 +96,7 @@ def valid_topic(topic):
 
 def valid_img(img):
     ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
-    ALLOWED_MIMETYPES = {"image/jpeg", "image/png", "image/gif"}
+    ALLOWED_MIMETYPES = {"image/jpeg", "image/png", "image/gif", "image/webp"}
     # check if the file is empty
     if img is None:
         return True
@@ -121,4 +121,21 @@ def valid_photos(photos):
     for photo in photos:
         if not valid_img(photo):
             return False
+    return True
+
+
+def valid_comment_name(name):
+    if not name:
+        return False
+    if not valid_string(name, 3, 200):
+        return False
+    return True
+
+def valid_comment_text(text):
+    COLUMNS = 50
+    ROWS = 4
+    if not text:
+        return False
+    if not valid_string(text, 5, COLUMNS * ROWS):
+        return False
     return True

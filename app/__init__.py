@@ -184,6 +184,44 @@ def agregar():
         return render_template("agregar-actividad.html")
 
 
+@app.route("/actividad/<int:id>/comentarios/<int:page>", methods=["GET"])
+@app.route("/actividad/<int:id>/comentarios", methods=["GET, POST"])
+def comentarios(id, page):
+    if request.method == "POST":
+        name = sanitize_input(request.form.get("name"))
+        comment = sanitize_input(request.form.get("comment"))
+        date = request.form.get("date")
+        error = []
+        if not validate.valid_name(name):
+            error += "Nombre inválido"
+        if not validate.valid_comment(comment):
+            error += "Comentario inválido"
+        if not validate.valid_date(date):
+            error += "Fecha inválida"
+        if not db.get_activity_by_id(id):
+            error += "Actividad inválida"
+        if error:
+            return {"error": error}
+        db.create_comment(id, name, comment)
+        return {"success": "Comentario creado"}
+
+
+    PAGE_SIZE = 10
+    if not id:
+        return {}
+    if not page:
+        page = 0
+    comments_dict = {}
+    comments_db = db.get_comments_by_activity_id(id, page, PAGE_SIZE)
+    for i, comment in enumerate(comments_db):
+        comments_dict[str(i)] = {
+            "id": comment.id,
+            "name": comment.nombre,
+            "comment": comment.comentario,
+            "date": comment.fecha,
+        }
+    return comments_dict
+
 @app.route("/actividad/<int:id>", methods=["GET"])
 @app.route("/actividad", methods=["GET"])
 def actividad(id=None):
