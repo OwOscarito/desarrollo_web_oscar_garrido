@@ -154,7 +154,7 @@ def agregar():
             return render_template("agregar-actividad.html", error=error)
         print("no error")
 
-        base_path = db.create_activity(
+        base_path, new_filenames = db.create_activity(
             comuna_id=commune,
             nombre=name,
             email=email,
@@ -174,8 +174,8 @@ def agregar():
 
         path = pathlib.Path("app/static").joinpath(str(base_path))
         path.mkdir(parents=True, exist_ok=True)
-        for photo in photos:
-            photo.save(path.joinpath(photo.filename))
+        for i, photo in enumerate(photos):
+            photo.save(path.joinpath(new_filenames[i]))
         print(f"saved in {path}")
 
         return redirect(url_for("listado"))
@@ -184,43 +184,44 @@ def agregar():
         return render_template("agregar-actividad.html")
 
 
+@app.route("/actividad/<int:id>/comentarios/agregar", methods=["POST"])
+def agregar_comentario(id):
+    if not id:
+        return redirect(url_for("listado"), error="Actividad inválida")
+    name = sanitize_input(request.form.get("name"))
+    comment = sanitize_input(request.form.get("comment"))
+    date = datetime.now()
+    error = []
+    if not validate.valid_name(name):
+        error += "Nombre inválido"
+    if not validate.valid_comment(comment):
+        error += "Comentario inválido"
+
+    if not db.get_activity_by_id(id):
+        error += "Actividad inválida"
+    if error:
+        return {"error": error}
+    db.create_comment(id, name, comment, date)
+    return {"success": "Comentario creado"}
+
+
 @app.route("/actividad/<int:id>/comentarios/<int:page>", methods=["GET"])
-@app.route("/actividad/<int:id>/comentarios", methods=["GET, POST"])
-def comentarios(id, page):
-    if request.method == "POST":
-        name = sanitize_input(request.form.get("name"))
-        comment = sanitize_input(request.form.get("comment"))
-        date = request.form.get("date")
-        error = []
-        if not validate.valid_name(name):
-            error += "Nombre inválido"
-        if not validate.valid_comment(comment):
-            error += "Comentario inválido"
-        if not validate.valid_date(date):
-            error += "Fecha inválida"
-        if not db.get_activity_by_id(id):
-            error += "Actividad inválida"
-        if error:
-            return {"error": error}
-        db.create_comment(id, name, comment)
-        return {"success": "Comentario creado"}
-
-
+@app.route("/actividad/<int:id>/comentarios", methods=["GET"])
+def comentarios(id, page=0):
     PAGE_SIZE = 10
     if not id:
         return {}
-    if not page:
-        page = 0
-    comments_dict = {}
+    comments = []
     comments_db = db.get_comments_by_activity_id(id, page, PAGE_SIZE)
-    for i, comment in enumerate(comments_db):
-        comments_dict[str(i)] = {
+    for comment in comments_db:
+        comments.append({
             "id": comment.id,
             "name": comment.nombre,
-            "comment": comment.comentario,
+            "text": comment.texto,
             "date": comment.fecha,
-        }
-    return comments_dict
+        })
+    return comments
+
 
 @app.route("/actividad/<int:id>", methods=["GET"])
 @app.route("/actividad", methods=["GET"])

@@ -173,36 +173,32 @@ def create_activity(
     )
     session.add(new_activity)
     session.flush()
-
     activity_id = new_activity.id
+
     new_tema = ActividadTema(tema=tema, glosa_otro=glosa_otro, actividad_id=activity_id)
-    print(contactos)
-    new_contactos = []
+    session.add(new_tema)
+
     for name, id in contactos:
         new_contacto = ContactarPor(
             nombre=name, identificador=id, actividad_id=activity_id
         )
-        new_contactos.append(new_contacto)
+        session.add(new_contacto)
 
-    new_fotos = []
+
     base_path = pathlib.Path(uploads_folder).joinpath(str(activity_id)).as_posix()
+    filenames = []
     for foto in fotos:
         filename = secure_filename(foto.filename)
         new_foto = Foto(
             ruta_archivo=base_path, nombre_archivo=filename, actividad_id=activity_id
         )
-        new_fotos.append(new_foto)
-
-    session.add(new_tema)
-    for new_contacto in new_contactos:
-        session.add(new_contacto)
-    for new_foto in new_fotos:
+        filenames.append(filename)
         session.add(new_foto)
 
     session.commit()
     session.close()
 
-    return base_path
+    return base_path, filenames
 
 
 def get_last_activities(quantity=1, offset=0):

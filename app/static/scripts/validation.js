@@ -221,7 +221,7 @@ const validateForm = () => {
   return validateWhere() && validateWho() && validateWhen() && validateWhat();
 }
 
-const validateComment = () => {
+const validateComment = (name, text) => {
   const validateName = (name) => {
     return validateLenght(name, 3, 80);
   }
@@ -231,9 +231,6 @@ const validateComment = () => {
     const maxLength = COLUMNS * ROWS;
     return validateLenght(comment, 5, maxLength);
   }
-  const name = document.getElementById("name").value;
-  const comment = document.getElementById("comment").value;
-
   if (!validateName(name)) {
     alert("Ingrese un nombre válido.");
     return false;

@@ -64,17 +64,24 @@
 
 <h4>Comentarios</h4>
 
-<form id="comment-form" method="POST" >
+<form id="comment-form">
   <label for="name">Nombre:</label>
-  <input type="text" name="name" id="name-input" minlength="3" maxlength="80" placeholder="Escribe tu nombre aquí..." required>
+  <input type="text" name="name" id="comment-name" minlength="3" maxlength="80" placeholder="Escribe tu nombre aquí..." required>
   <label for="comment">Escribe tu comentario:</label>
-  <textarea name="comment" id="comment-input" rows="4" cols="50" minlength="5" placeholder="Escribe tu comentario aquí..."></textarea>
-  <button type="submit" onclick="validateAndSubmit();">Agregar Comentario</button>
+  <textarea name="comment" id="comment-text" rows="4" cols="50" minlength="5" placeholder="Escribe tu comentario aquí..."></textarea>
+  <button type="submit" onclick="validateAndSubmitComment();">Agregar Comentario</button>
 </form>
+
+<div id="comments-container">
+
+</div>
 
 {% endblock %}
 
 {% block javascript %}
 <script src="{{ url_for('static', filename='scripts/validation.js') }}"></script>
+<script>
+  const activityId = JSON.parse(`{{ activity.id|tojson }}`);
+</script>
 <script src="{{ url_for('static', filename='scripts/activityInfo.js') }}"></script>
 {% endblock %}

@@ -15,12 +15,23 @@ docker compose up -d
 
 Luego para inicializar las tablas de la base de datos y los datos de region-comuna:
 ```sh
-python app/database/manage.py init
+python app/manage.py -i
 ```
 
-Ademas de pueden eliminar todas la base de datos:
+Ademas se pueden eliminar todas las tablas con:
 ```sh
-python app/database/manage.py drop
+python app/manage.py -d
+```
+
+Como extra se puede agregar actividades de ejemplo con:
+
+```sh
+python app/manage.py -a
+```
+Y comentarios de ejemplo en una actividad con:
+
+```sh
+python app/manage.py -c <id>
 ```
 
 ## Correr Servidor web 
