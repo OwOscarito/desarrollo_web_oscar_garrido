@@ -25,6 +25,19 @@ def base():
     return render_template("base.html")
 
 
+@app.route("/estadisticas/dia", methods=["POST"])
+def estadisticas_dia():
+    return {}
+
+@app.route("/estadisticas/tema", methods=["POST"])
+def estadisticas_tema():
+    return {}
+
+@app.route("/estadisticas/tiempo", methods=["POST"])
+def estadisticas_tiempo():
+    return {}
+
+
 @app.route("/estadisticas", methods=["GET"])
 def estadisticas():
     return render_template("estadisticas.html")
