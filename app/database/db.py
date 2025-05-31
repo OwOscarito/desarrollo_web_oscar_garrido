@@ -8,6 +8,7 @@ from sqlalchemy import (
     DateTime,
     Enum,
     ForeignKey,
+    func,
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from werkzeug.utils import secure_filename
@@ -129,6 +130,7 @@ class Foto(Base):
 
     actividad = relationship("Actividad", back_populates="foto")
 
+
 class Comentario(Base):
     __tablename__ = "comentario"
 
@@ -139,7 +141,6 @@ class Comentario(Base):
     actividad_id = Column(BigInteger, ForeignKey("actividad.id"), nullable=False)
 
     actividad = relationship("Actividad", back_populates="comentario")
-
 
 
 # --- Functions ---
@@ -183,7 +184,6 @@ def create_activity(
             nombre=name, identificador=id, actividad_id=activity_id
         )
         session.add(new_contacto)
-
 
     base_path = pathlib.Path(uploads_folder).joinpath(str(activity_id)).as_posix()
     filenames = []
@@ -257,6 +257,7 @@ def get_topic_by_activity_id(id):
     session.close()
     return topic
 
+
 def get_comments_by_activity_id(id, offset=0, quantity=10):
     session = SessionLocal()
     comments = (
@@ -268,6 +269,7 @@ def get_comments_by_activity_id(id, offset=0, quantity=10):
     )
     session.close()
     return comments
+
 
 def add_comment(
     actividad_id,
@@ -286,8 +288,37 @@ def add_comment(
     session.commit()
     session.close()
 
+
 def get_count(table):
     session = SessionLocal()
     count = session.query(table.id).count()
     session.close()
     return count
+
+
+def get_activities_per_day(limit_datetime):
+    session = SessionLocal()
+    activities_per_day = (
+        session.query(
+            func.date(Actividad.dia_hora_inicio),
+            func.count(Actividad.id)
+        )
+        .filter(Actividad.dia_hora_inicio >= limit_datetime)
+        .group_by(func.date(Actividad.dia_hora_inicio))
+        .all()
+    )
+    session.close()
+    return activities_per_day
+
+def get_activities_per_topic():
+    session = SessionLocal()
+    activities_per_topic = (
+        session.query(
+            ActividadTema.tema,
+            func.count(ActividadTema.id)
+        )
+        .group_by(ActividadTema.tema)
+        .all()
+    )
+    session.close()
+    return activities_per_topic

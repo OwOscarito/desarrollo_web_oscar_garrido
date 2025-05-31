@@ -1,16 +1,17 @@
+let day_chart;
 document.addEventListener('DOMContentLoaded', function () {
-  const day_chart = Highcharts.chart('day-chart', {
+  day_chart = Highcharts.chart('day-chart', {
     chart: {
       type: 'line'
     },
     title: {
-      text: 'Actividades por día de la semana'
+      text: 'Actividades por día'
     },
     xAxis: {
       title: {
         text: 'Dia'
       },
-      categories: [1,2,3,4,5,6,7],
+      categories: [],
     },
     yAxis: {
       title: {
@@ -19,40 +20,27 @@ document.addEventListener('DOMContentLoaded', function () {
     },
     series: [{
       name: 'N° Actividades',
-      data: [1, 0, 4, 1, 0, 4, 0]
+      data: []
     }]
   });
 });
 
+let topic_chart;
 document.addEventListener('DOMContentLoaded', function () {
-  const topic_chart = Highcharts.chart('topic-chart', {
+  topic_chart = Highcharts.chart('topic-chart', {
     chart: {
       type: 'pie'
     },
     title: {
       text: 'Actividades por tema'
     },
-    xAxis: {
-      title: {
-        text: 'Temas'
-      },
-      categories: ["Música", "Deporte", "Ciencias", "Religión", "Política", 
-        "Tecnología", "Juegos", "Baile", "Comida", "Otro"]
-    },
-    yAxis: {
-      title: {
-        text: 'N° Actividades'
-      }
-    },
-    series: [{
-      name: 'N° Actividades',
-      data: [1, 0, 4, 1, 0, 4, 0, 0, 4, 0]
-    }]
+    series: [{}]
   });
 });
 
+let time_chart;
 document.addEventListener('DOMContentLoaded', function () {
-  const time_chart = Highcharts.chart('time-chart', {
+  time_chart = Highcharts.chart('time-chart', {
     chart: {
       type: 'column'
     },
@@ -76,40 +64,48 @@ document.addEventListener('DOMContentLoaded', function () {
     }]
   });
 });
-queryData = function (url) {
+
+updateDayChart = () => {
+  const url = '/estadisticas/dia';
   fetch(url)
     .then(response => response.json())
-    .then(comments => {
-      console.log(comments);
-      if (comments.length == 0) {
-        const commentNotice = document.createElement("p");
-        commentNotice.className = "notice";
-        commentNotice.textContent = "No hay comentarios.";
-        commentsContainer.appendChild(commentNotice);
-        return;
-      }
-      for (const index in comments) {
-        if (comments.hasOwnProperty(index)) {
-          var comment = comments[index];
-          const commentElement = document.createElement("article");
-
-          const commentName = document.createElement("h4");
-          commentName.textContent = index + ". " + comment["name"];
-          commentElement.appendChild(commentName);
-
-          const commentText = document.createElement("p");
-          commentText.textContent = comment["text"];
-          commentElement.appendChild(commentText);
-
-          const commentDate = document.createElement("p");
-          commentDate.textContent = new Date(comment["date"]).toLocaleString();
-          commentElement.appendChild(commentDate);
-
-          commentsContainer.appendChild(commentElement);
-        }
-      }
+    .then(data => {
+      console.log("Data received:", data);
+      day_chart.update({
+        xAxis: {
+          categories: data["days"]
+        },
+        series: [{
+          data: data["count"]
+        }]
+      });
     })
     .catch(error => {
-      console.error("Error loading graph:", error);
+      console.error("Error receiving response:", error);
+      return null;
     });
+}
+
+updateTopicChart = () => {
+  const url = '/estadisticas/tema';
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Data received:", data);
+      topic_chart.update({
+        series:[{
+          name: "N° Actividades",
+          data: data
+        }]
+      });
+    })
+    .catch(error => {
+      console.error("Error receiving response:", error);
+      return null;
+    });
+}
+
+window.onload = () => {
+  updateDayChart();
+  updateTopicChart();
 }

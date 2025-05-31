@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, url_for
 from app.database import db
 from app.utils import validate
 import bleach
-from datetime import datetime
+from datetime import datetime, timedelta
 import pathlib
 
 UPLOAD_FOLDER = "uploads"
@@ -25,15 +25,35 @@ def base():
     return render_template("base.html")
 
 
-@app.route("/estadisticas/dia", methods=["POST"])
+@app.route("/estadisticas/dia", methods=["GET"])
 def estadisticas_dia():
-    return {}
+    DAY_LIMIT = 14
+    today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    day_limit = today - timedelta(days=DAY_LIMIT)
+    print(f"day_limit: {day_limit}")
+    activities_per_day = db.get_activities_per_day(day_limit)
+    days, count = zip(*activities_per_day)
+    response = {
+        "days": [day.strftime("%Y-%m-%d") for day in days],
+        "count": count,
+    }
+    print(f"response: {response}")
+    return  response
 
-@app.route("/estadisticas/tema", methods=["POST"])
+@app.route("/estadisticas/tema", methods=["GET"])
 def estadisticas_tema():
-    return {}
+    activities_per_topic = db.get_activities_per_topic()
+    response = []
+    for topic, count in activities_per_topic:
+        data = {
+            "name": topic.name.capitalize(),
+            "y": count,
+        }
+        response.append(data)
+    print(f"response: {response}")
+    return response
 
-@app.route("/estadisticas/tiempo", methods=["POST"])
+@app.route("/estadisticas/tiempo", methods=["GET"])
 def estadisticas_tiempo():
     return {}
 
