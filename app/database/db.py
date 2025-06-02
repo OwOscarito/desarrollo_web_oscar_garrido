@@ -14,7 +14,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from werkzeug.utils import secure_filename
 import pathlib
-from datetime import datetime
+
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -301,13 +301,10 @@ def get_count(table):
 def get_activities_per_day(min_limit, max_limit):
     session = SessionLocal()
     activities_per_day = (
-        session.query(
-            func.date(Actividad.dia_hora_inicio),
-            func.count(Actividad.id)
-        )
+        session.query(func.date(Actividad.dia_hora_inicio), func.count(Actividad.id))
         .filter(
             min_limit <= Actividad.dia_hora_inicio,
-            Actividad.dia_hora_inicio <= max_limit
+            Actividad.dia_hora_inicio <= max_limit,
         )
         .group_by(func.date(Actividad.dia_hora_inicio))
         .all()
@@ -315,47 +312,37 @@ def get_activities_per_day(min_limit, max_limit):
     session.close()
     return activities_per_day
 
+
 def get_activities_per_topic():
     session = SessionLocal()
     activities_per_topic = (
-        session.query(
-            ActividadTema.tema,
-            func.count(ActividadTema.id)
-        )
+        session.query(ActividadTema.tema, func.count(ActividadTema.id))
         .group_by(ActividadTema.tema)
         .all()
     )
     session.close()
     return activities_per_topic
 
+
 def get_activities_month_summary(min_limit, max_limit):
     session = SessionLocal()
     NOON_START = 11
     AFTERNOON_START = 13
-    
-    YEAR_MONTH = (
-        func.date_format(Actividad.dia_hora_inicio, "%m-%Y")
-    )
-    
+
+    YEAR_MONTH = func.date_format(Actividad.dia_hora_inicio, "%m-%Y")
+
     TIME_GROUP = case(
         (func.hour(Actividad.dia_hora_inicio) > NOON_START, "Mañana"),
         (func.hour(Actividad.dia_hora_inicio) > AFTERNOON_START, "Mediodia"),
-        else_="Tarde"
+        else_="Tarde",
     )
     activities_count = (
-        session.query(
-            YEAR_MONTH,
-            TIME_GROUP,
-            func.count(Actividad.id)
-
-        )
+        session.query(YEAR_MONTH, TIME_GROUP, func.count(Actividad.id))
         .filter(
             min_limit <= Actividad.dia_hora_inicio,
-            Actividad.dia_hora_inicio <= max_limit
+            Actividad.dia_hora_inicio <= max_limit,
         )
-        .group_by(
-            YEAR_MONTH, 
-            TIME_GROUP)
+        .group_by(YEAR_MONTH, TIME_GROUP)
         .all()
     )
     session.close()
