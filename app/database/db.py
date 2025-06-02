@@ -9,10 +9,12 @@ from sqlalchemy import (
     Enum,
     ForeignKey,
     func,
+    case,
 )
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from werkzeug.utils import secure_filename
 import pathlib
+from datetime import datetime
 
 DB_NAME = "tarea2"
 DB_USERNAME = "cc5002"
@@ -296,14 +298,17 @@ def get_count(table):
     return count
 
 
-def get_activities_per_day(limit_datetime):
+def get_activities_per_day(min_limit, max_limit):
     session = SessionLocal()
     activities_per_day = (
         session.query(
             func.date(Actividad.dia_hora_inicio),
             func.count(Actividad.id)
         )
-        .filter(Actividad.dia_hora_inicio >= limit_datetime)
+        .filter(
+            min_limit <= Actividad.dia_hora_inicio,
+            Actividad.dia_hora_inicio <= max_limit
+        )
         .group_by(func.date(Actividad.dia_hora_inicio))
         .all()
     )
@@ -322,3 +327,36 @@ def get_activities_per_topic():
     )
     session.close()
     return activities_per_topic
+
+def get_activities_month_summary(min_limit, max_limit):
+    session = SessionLocal()
+    NOON_START = 11
+    AFTERNOON_START = 13
+    
+    YEAR_MONTH = (
+        func.date_format(Actividad.dia_hora_inicio, "%m-%Y")
+    )
+    
+    TIME_GROUP = case(
+        (func.hour(Actividad.dia_hora_inicio) > NOON_START, "Mañana"),
+        (func.hour(Actividad.dia_hora_inicio) > AFTERNOON_START, "Mediodia"),
+        else_="Tarde"
+    )
+    activities_count = (
+        session.query(
+            YEAR_MONTH,
+            TIME_GROUP,
+            func.count(Actividad.id)
+
+        )
+        .filter(
+            min_limit <= Actividad.dia_hora_inicio,
+            Actividad.dia_hora_inicio <= max_limit
+        )
+        .group_by(
+            YEAR_MONTH, 
+            TIME_GROUP)
+        .all()
+    )
+    session.close()
+    return activities_count

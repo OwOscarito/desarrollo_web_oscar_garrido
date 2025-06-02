@@ -27,11 +27,13 @@ def base():
 
 @app.route("/estadisticas/dia", methods=["GET"])
 def estadisticas_dia():
-    DAY_LIMIT = 14
+    DAY_LIMIT = 7
+    DATE_DIFF = timedelta(days=DAY_LIMIT)
     today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    day_limit = today - timedelta(days=DAY_LIMIT)
-    print(f"day_limit: {day_limit}")
-    activities_per_day = db.get_activities_per_day(day_limit)
+    min_limit = today - DATE_DIFF
+    max_limit = today + DATE_DIFF
+    print(f"day_limit: {min_limit}")
+    activities_per_day = db.get_activities_per_day(min_limit, max_limit)
     days, count = zip(*activities_per_day)
     response = {
         "days": [day.strftime("%Y-%m-%d") for day in days],
@@ -55,7 +57,32 @@ def estadisticas_tema():
 
 @app.route("/estadisticas/tiempo", methods=["GET"])
 def estadisticas_tiempo():
-    return {}
+    MONTH_LIMIT = 6
+    DATE_DIFF = timedelta(days=MONTH_LIMIT * 30)
+    TIME_GROUP_LIST = ["Mañana", "Mediodía", "Tarde"]
+    today = datetime.now().replace(hour=0, minute=0, second=0)
+    min_limit = today - DATE_DIFF
+    max_limit = today + DATE_DIFF
+    month_summary = db.get_activities_month_summary(min_limit, max_limit)
+    year_month, _, _ = zip(*month_summary)
+    year_month_list = list(dict.fromkeys(year_month)) # Remove duplicates
+    year_month_count = len(year_month)
+    response = {
+        "year-month": year_month_list,
+        "series": [],
+    }
+    for time_group in TIME_GROUP_LIST:
+        response["series"].append({
+            "name": time_group,
+            "data": [0] * year_month_count,  # Initialize with zeros
+        })
+    
+    for year_month, time_group, count in month_summary:
+        index = year_month_list.index(year_month)
+        response["series"][TIME_GROUP_LIST.index(time_group)]["data"][index] = count
+    
+    print(f"response: {response}")
+    return response
 
 
 @app.route("/estadisticas", methods=["GET"])

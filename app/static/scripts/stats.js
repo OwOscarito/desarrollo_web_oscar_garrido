@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
       title: {
         text: 'Dia'
       },
-      categories: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+      categories: [],
     },
     yAxis: {
       title: {
@@ -59,8 +59,16 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     },
     series: [{
-      name: 'N° Actividades',
-      data: [1, 0, 4, 1, 0, 4, 0]
+      name: 'Mañana',
+      data: []
+    },
+    {
+      name: 'Mediodia',
+      data: []
+    },
+    {
+      name: 'Tarde',
+      data: []
     }]
   });
 });
@@ -93,7 +101,7 @@ updateTopicChart = () => {
     .then(data => {
       console.log("Data received:", data);
       topic_chart.update({
-        series:[{
+        series: [{
           name: "N° Actividades",
           data: data
         }]
@@ -105,7 +113,28 @@ updateTopicChart = () => {
     });
 }
 
+updateTimeChart = () => {
+  const url = '/estadisticas/tiempo';
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      console.log("Data received:", data);
+      time_chart.update({
+        xAxis: {
+          categories: data["year-month"]
+        },
+        series: data["series"]
+      });
+    })
+    .catch(error => {
+      console.error("Error receiving response:", error);
+      return null;
+    });
+}
+
+
 window.onload = () => {
   updateDayChart();
   updateTopicChart();
+  updateTimeChart();
 }
