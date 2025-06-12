@@ -48,7 +48,7 @@ loadComments = function (activityId, page) {
     });
 }
 
-submitComment = (comment) => {
+submitComment = (commentForm) => {
   const url = `/actividad/${activityId}/comentarios/agregar`;
   const response = fetch(url, {
     "method": "POST",
@@ -61,7 +61,7 @@ submitComment = (comment) => {
     }
     else {
       const commentsContainer = document.getElementById("error-container");
-      alert("Error al enviar el comentario: " + data["error"]);
+      commentsContainer.textContent = "Error al enviar el comentario: " + data["error"];
     }
 
   })
