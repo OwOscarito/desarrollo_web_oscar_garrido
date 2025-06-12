@@ -38,13 +38,13 @@
 
 <h3>Que?</h3>
 
-<p></p><strong>Tema:</strong> {{ activity.topic }}</p>
+<p><strong>Tema:</strong> {{ activity.topic }}</p>
 {% if activity.description %}
-<p></p><strong>Descripcion:</strong> {{ activity.description }}</p>
+<p><strong>Descripcion:</strong> {{ activity.description }}</p>
 {% endif %}
 
 
-<strong>Fotos:</strong></p>
+<p><strong>Fotos:</strong></p>
 <figure>
   {% for photo in activity.photos %}
   <div class="small-image-container">
@@ -55,7 +55,7 @@
 
 
 <dialog id="preview-dialog">
-  <img class="large-image" src="" id="preview-photo" alt="Foto Preview" >
+  <img class="large-image" src="{{ activity.photos[0] }}" id="preview-photo" alt="Foto Preview" >
   <button id="close-preview" onclick="closePreview();">Cerrar</button>
 </dialog>
 
@@ -65,16 +65,14 @@
 <h4>Comentarios</h4>
 
 <form id="comment-form">
-  <label for="name">Nombre:</label>
+  <label for="comment-name">Nombre:</label>
   <input type="text" name="name" id="comment-name" minlength="3" maxlength="80" placeholder="Escribe tu nombre aquí..." required>
-  <label for="comment">Escribe tu comentario:</label>
+  <label for="comment-text">Escribe tu comentario:</label>
   <textarea name="comment" id="comment-text" rows="4" cols="50" minlength="5" placeholder="Escribe tu comentario aquí..."></textarea>
   <button type="submit" onclick="validateAndSubmitComment();">Agregar Comentario</button>
 </form>
 
-<div id="comments-container">
-
-</div>
+<div id="comments-container"></div>
 
 {% endblock %}
 

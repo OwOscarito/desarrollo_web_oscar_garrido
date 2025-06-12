@@ -35,8 +35,8 @@
     <label for="phone">Telefono</label>
     <input type="tel" name="phone" id="phone" minlength="14" maxlength="14">
 
-    <label for="contactos">Contacto</label>
-    <ul name="contactos">
+    <label>Contacto</label>
+    <ul>
       <li><input type="checkbox" name="whatsapp" onclick="updateInput(this);">Whatsapp
         <input id="whatsapp" type="text" name="whatsapp-id" style="display: none">
       </li>
@@ -82,7 +82,7 @@
     <label for="description">Descripcion</label>
     <textarea name="description" id="description" rows="10" cols="50" maxlength="500"></textarea>
 
-    <label for="photo">Fotos</label>
+    <label>Fotos</label>
 
     <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo1');" name="photo0" id="photo0" accept="image/*" required>
     <input type="file" onclick="this.value = null;" onchange="updatePhoto(this, 'photo2');" name="photo1" id="photo1" accept="image/*" style="display: none">
