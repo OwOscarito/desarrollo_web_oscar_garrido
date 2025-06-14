@@ -343,6 +343,7 @@ def actividad(id=None):
 @app.route("/listado/<int:page>", methods=["GET"])
 @app.route("/listado", methods=["GET"])
 def listado(page=1):
+    page = page - 1 if page > 0 else 0
     activities = []
     for activity in db.get_last_activities(5, page):
         photos = db.get_photos_by_activity_id(activity.id)
