@@ -20,13 +20,15 @@ function pageSwitcher(currentPage, pageCount, maxDelta = 5) {
     }
   }
   for (let i = startPage; i <= endPage; i++) {
-    const pageLink = document.createElement('a');
-    pageLink.className = 'button';
+    let pageLink = document.createElement('a');
     if (i === currentPage) {
-      pageLink.disabled = "disabled";
-      pageLink.classList.add('aria-current');
+      pageLink = document.createElement('button');
+      pageLink.href = '#';
+      pageLink.disabled = true;
+    } else {
+      pageLink.className = 'button';
+      pageLink.href = `/listado/${i}`;
     }
-    pageLink.href = `/listado/${i}`;
     pageLink.textContent = i;
     elem.appendChild(pageLink);
   }
@@ -46,7 +48,6 @@ function pageSwitcher(currentPage, pageCount, maxDelta = 5) {
   return elem;
 }
 window.onload = () => {
-  let pageNum = 1;
   let MAX_PAGE = 5;
   const container = document.getElementById("page-switcher-container");
   container.appendChild(pageSwitcher(pageNum, MAX_PAGE));

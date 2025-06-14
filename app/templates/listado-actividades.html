@@ -45,5 +45,8 @@
 {% endblock %}
 
 {% block javascript %}
+<script>  
+ const pageNum = JSON.parse(`{{ pageNum|tojson }}`);
+</script>
 <script src="{{ url_for('static', filename='scripts/activityList.js') }}"></script>
 {% endblock %}

@@ -374,7 +374,7 @@ def listado(page=1):
             }
         )
     print(activities)
-    return render_template("listado-actividades.html", activities=activities)
+    return render_template("listado-actividades.html", activities=activities, pageNum=page + 1)
 
 
 @app.route("/", methods=["GET"])
