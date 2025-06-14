@@ -340,11 +340,11 @@ def actividad(id=None):
     print(activity)
     return render_template("informacion-actividad.html", activity=activity)
 
-
+@app.route("/listado/<int:page>", methods=["GET"])
 @app.route("/listado", methods=["GET"])
-def listado():
+def listado(page=0):
     activities = []
-    for activity in db.get_last_activities(5):
+    for activity in db.get_last_activities(5, page):
         photos = db.get_photos_by_activity_id(activity.id)
         dt_end = activity.dia_hora_termino
         if not dt_end:

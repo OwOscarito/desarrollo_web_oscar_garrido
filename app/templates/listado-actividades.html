@@ -38,9 +38,12 @@
   {% endif %}
 </table>
 </div>
+<div class="hcenter" id="page-switcher-container">
+</div>
 
 <a class="button" href="{{ url_for('index') }}">Volver al Inicio</a>
 {% endblock %}
 
 {% block javascript %}
+<script src="{{ url_for('static', filename='scripts/activityList.js') }}"></script>
 {% endblock %}
