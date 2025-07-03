@@ -34,6 +34,7 @@ def init_tables():
     session = db.SessionLocal()
     execute_sql_file(session, "app/database/tarea2.sql")
     execute_sql_file(session, "app/database/tabla-comentario.sql")
+    execute_sql_file(session, "app/database/tabla-nota.sql")
     session.commit()
 
 
@@ -41,7 +42,6 @@ def init_region_comuna():
     session = db.SessionLocal()
     execute_sql_file(session, "app/database/region-comuna.sql")
     session.commit()
-
 
 def drop_db():
     # Create a new session
