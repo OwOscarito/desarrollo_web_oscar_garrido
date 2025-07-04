@@ -26,6 +26,7 @@ public class ActividadTema {
     @Enumerated(EnumType.ORDINAL)
     private Tema tema;
 
+    @Column(name = "glosa_otro")
     private String glosaOtro;
     
     @ManyToOne(fetch = FetchType.LAZY)

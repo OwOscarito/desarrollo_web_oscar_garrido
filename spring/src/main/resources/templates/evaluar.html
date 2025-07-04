@@ -30,16 +30,14 @@
                     <td th:text="${actividad['notas']}"></td>
                     <td> <button id="open-evaluation-button" th:onclick="'javascript:open_evaluation(' + ${actividad['id']} + ')'">Evaluar</button> </td>
                 </tr>
-                <tr>
+                <tr th:if="${#lists.isEmpty(data)}">
                     <td colspan="8">
                         <p class="hcenter">No hay actividades</p>
                     </td>
-                </tr>
             </table>
         </div>
 
-        <footer th:replace="fragments/base :: footer"> </footer>
-
+        
         <dialog id="evaluation-dialog">
             <form id="evaluation-form">
                 <div class="hcenter">
@@ -59,4 +57,5 @@
 
     <script th:src="@{/scripts/evaluar.js}"></script>
 </body>
+<footer th:replace="fragments/base :: footer"> </footer>
 </html>

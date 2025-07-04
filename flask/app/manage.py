@@ -84,6 +84,35 @@ def example_activity():
         glosa_otro="Ejemplo", 
         descripcion="Descripción de la actividad de ejemplo", 
         dia_hora_inicio=dt.datetime.now() + dt.timedelta(days=1),
+        dia_hora_termino=dt.datetime.now() + dt.timedelta(days=5),
+        uploads_folder="uploads",
+        fotos=[ex_img],
+    )
+    
+    activity_id = int(base_path.split("/")[-1])
+    print(f"Actividad de ejemplo creada con ID: {activity_id}")
+
+    static_path = pathlib.Path("app/static")
+    new_path = static_path/base_path
+    new_path.mkdir(parents=True, exist_ok=True)
+    shutil.copy(ex_img_path, new_path)
+
+    return activity_id
+
+def example_old_activity():
+    ex_img_path = pathlib.Path("app/static/example/ex1.jpg")
+    ex_img = FakeFileStorage(ex_img_path)
+    
+    base_path, _ = db.create_activity(
+        comuna_id=130202,
+        sector="Sector de ejemplo",
+        nombre="Organizador de ejemplo", 
+        email="ejemplo@mail.com",
+        tema="otro",
+        glosa_otro="Ejemplo", 
+        descripcion="Descripción de la actividad de ejemplo", 
+        dia_hora_inicio=dt.datetime.now() - dt.timedelta(days=5),
+        dia_hora_termino=dt.datetime.now() - dt.timedelta(days=2),
         uploads_folder="uploads",
         fotos=[ex_img],
     )
@@ -124,6 +153,11 @@ if __name__ == "__main__":
         action='store_true'
     )
     parser.add_argument(
+        "-o", "--old-activity" ,
+        help="example activity",
+        action='store_true'
+    )
+    parser.add_argument(
         "-c", "--comment" ,
         help="example comment",
         type=int,
@@ -142,6 +176,8 @@ if __name__ == "__main__":
         drop_db()
     if args.activity:
         act_id = example_activity()
+    if args.old_activity:
+        act_id = example_old_activity()
     if args.comment:
         example_comment(int(args.comment))
     
