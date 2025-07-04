@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head th:replace="fragments/base :: head">
+    <title>Evaluar Actividades</title>
+</head>
+
+<body>
+    <header th:replace="fragments/base :: header"> </header>
+    <main>
+        <h2>Últimas 5 Actividades</h2>
+        <div class="hcenter">
+            <table id="activity-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Sector</th>
+                    <th>Nombre</th>
+                    <th>Temas</th>
+                    <th>Nota Promedio</th>
+                    <th>Evaluar</th>
+                </tr>
+
+                <tr th:each="actividad : ${data}" class="clickable">
+                    <td th:text="${actividad['id']}"></td>
+                    <td th:text="${actividad['inicio']}"></td>
+                    <td th:text="${actividad['termino']}"></td>
+                    <td th:text="${actividad['sector']}"></td>
+                    <td th:text="${actividad['nombre']}"></td>
+                    <td th:text="${actividad['notas']}"></td>
+                    <td> <button id="open-evaluation-button" th:onclick="'javascript:open_evaluation(' + ${actividad['id']} + ')'">Evaluar</button> </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <p class="hcenter">No hay actividades</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <footer th:replace="fragments/base :: footer"> </footer>
+
+        <dialog id="evaluation-dialog">
+            <form id="evaluation-form">
+                <div class="hcenter">
+                    <label>Nota Actividad:</label>
+                    <label><input checked="checked" name="grade" type="radio" value="1" /> 1</label>
+                    <label><input name="grade" type="radio" value="2" /> 2</label>
+                    <label><input name="grade" type="radio" value="3" /> 3</label>
+                    <label><input name="grade" type="radio" value="4" /> 4</label>
+                    <label><input name="grade" type="radio" value="5" /> 5</label>
+                    <label><input name="grade" type="radio" value="6" /> 6</label>
+                    <label><input name="grade" type="radio" value="7" /> 7</label>
+                </div>
+                <button id="send-evaluation-button" type="button" onclick="send_evaluation()">Enviar Nota</button>
+            </form>
+        </dialog>
+    </main>
+
+    <script th:src="@{/scripts/evaluar.js}"></script>
+</body>
+</html>

@@ -1,65 +1,59 @@
 package com.owoscarito.evaluaciones.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "actividad")
 public class Actividad {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @NotNull
-    private Long comuna_id;
-
+    @Column(name = "sector", length = 100)
     private String sector;
 
-    @NotNull
+    @Column(name = "nombre", nullable = false, length = 200)
     private String nombre;
 
-    @NotNull
-    private String email;
+    @Column(name = "dia_hora_inicio", nullable = false)
+    private LocalDateTime diaHoraInicio;
 
-    private String celular;
+    @Column(name = "dia_hora_termino")
+    private LocalDateTime diaHoraTermino;
 
-    @NotNull
-    private LocalDateTime dia_hora_inicio;
+    @OneToMany(mappedBy = "actividad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ActividadTema> temas;
 
-    @NotNull
-    private LocalDateTime dia_hora_termino;
-
-    private String descripcion;
+    @OneToMany(mappedBy = "actividad", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Nota> notas;
 
     Actividad() {
-        // Constructor por defecto
     }
 
-    Actividad(Long comuna_id, String sector, String nombre, String email, String celular,
-              LocalDateTime dia_hora_inicio, LocalDateTime dia_hora_termino, String descripcion) {
-        this.comuna_id = comuna_id;
+    Actividad(Integer id, String sector, String nombre,
+              LocalDateTime dia_hora_inicio, LocalDateTime dia_hora_termino,
+              List<ActividadTema> temas, List<Nota> notas) {
+        this.id = id;
         this.sector = sector;
         this.nombre = nombre;
-        this.email = email;
-        this.celular = celular;
-        this.dia_hora_inicio = dia_hora_inicio;
-        this.dia_hora_termino = dia_hora_termino;
-        this.descripcion = descripcion;
+        this.diaHoraInicio = dia_hora_inicio;
+        this.diaHoraTermino = dia_hora_termino;
+        this.temas = temas;
+        this.notas = notas;
     }
-    // Getters
-    public Long getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public Long getComuna_id() {
-        return comuna_id;
+    public List<ActividadTema> getTemas() {
+        return temas;
+    }
+
+    public List<Nota> getNotas() {
+        return notas;
     }
 
     public String getSector() {
@@ -70,28 +64,33 @@ public class Actividad {
         return nombre;
     }
 
-    public String getEmail() {
-        return email;
+    public LocalDateTime getDiaHoraInicio() {
+        return diaHoraInicio;
     }
 
-    public String getCelular() {
-        return celular;
+    public LocalDateTime getDiaHoraTermino() {
+        return diaHoraTermino;
     }
 
-    public LocalDateTime getDia_hora_inicio() {
-        return dia_hora_inicio;
+    public Double averageNota() {
+        if (notas == null || notas.isEmpty()) {
+            return -1.0;
+        }
+        double total = 0.0;
+        for (Nota nota : notas) {
+            total += nota.getNota();
+        }
+        return total / notas.size();
     }
 
-    public LocalDateTime getDia_hora_termino() {
-        return dia_hora_termino;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public static Boolean validateActivity(String confText, MultipartFile confImg) {
-        // Ejercicio: implementar validacion de confesiones :)
-        return true;
+    public String stringTemas() {
+        if (temas != null && !temas.isEmpty()) {
+            StringBuilder strTemas = new StringBuilder();
+            temas.forEach(tema -> {
+                strTemas.append(tema.stringTema());
+            });
+            return strTemas.toString();
+        }
+        return "-";
     }
 }

@@ -2,7 +2,7 @@
 [http](https://github.com/OwOscarito/desarrollo_web_oscar_garrido/tree/Tarea_2o)
 
 ## Base de datos
-Para correr el servidor web se necesita una base de datos mysql corriendo de forma local con:
+Para correr el servidor web se requiere una base de datos mysql corriendo de forma local con:
 - Nombre = ```tarea2```
 - Usuario = ```cc5002```
 - Contraseña = ```programacionweb```
@@ -12,7 +12,6 @@ Se puede ejecutar en un contenedor con el archivo ```compose.yaml```:
 ```sh
 docker compose up -d
 ```
-
 Luego para inicializar las tablas de la base de datos y los datos de region-comuna:
 ```sh
 python app/manage.py -i
@@ -34,7 +33,9 @@ Y comentarios de ejemplo en una actividad con:
 python app/manage.py -c <id>
 ```
 
-## Correr Servidor web 
+## Correr Servidor web para registro de actividades
+Este se encuentra en la carpeta flask y se corre utilizando python.
+
 Crear venv:
 ```sh
 python -m venv .venv
@@ -57,3 +58,14 @@ Correr la aplicacion con:
 ```sh
 flask run
 ```
+
+## Correr Servidor web para evaluacion de actividades
+Este se encuentra en la carpeta spring y se corre utilizando java24.
+
+Correr la aplicacion con:
+```sh
+./mvnw spring-boot:run #Linux / MacOS
+
+mvnw.cmd spring:boot:run #Windows
+```
+
