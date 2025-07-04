@@ -21,9 +21,9 @@ public class AppService {
         this.actividadRepositorio = actividadRepositorio;
     }
 
-    public List<Map<String, String>> getDataActividades(Integer pageSize) {
-        List<Actividad> actividades = actividadRepositorio.findAllByOrderByIdDesc(PageRequest.of(0, pageSize)).getContent();
-        List<Map<String, String>> actividadesData = new ArrayList<>();
+    public List<Map<String, String>> getDataActividades(Integer pageNum, Integer pageSize) {
+        List<Actividad> actividades = actividadRepositorio.findAllByOrderByIdDesc(PageRequest.of(pageNum, pageSize)).getContent();
+        List<Map<String, String>> data = new ArrayList<>(pageSize);
 
         for (Actividad actividad : actividades) {
             Map<String, String> actividadData = new HashMap<>();
@@ -36,8 +36,8 @@ public class AppService {
             actividadData.put("temas", actividad.stringTemas());
             actividadData.put("nota", actividad.averageNota().toString());
 
-            actividadesData.add(actividadData);
+            data.add(actividadData);
             }
-        return actividadesData;
+        return data;
     }
 }

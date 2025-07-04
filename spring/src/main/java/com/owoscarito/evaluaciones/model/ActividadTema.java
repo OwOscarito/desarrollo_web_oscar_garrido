@@ -1,7 +1,6 @@
 package com.owoscarito.evaluaciones.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 enum Tema {
     música,
@@ -35,10 +34,6 @@ public class ActividadTema {
 
     public Integer getId() {
         return id;
-    }
-
-    private Tema getTema() {
-        return tema;
     }
 
     public String getGlosaOtro() {
