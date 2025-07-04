@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+
 
 @Service
 public class AppService {
@@ -22,10 +24,12 @@ public class AppService {
     }
 
     public List<Map<String, String>> getDataActividades(Integer pageNum, Integer pageSize) {
-        List<Actividad> actividades = actividadRepositorio.findAllByOrderByIdDesc(PageRequest.of(pageNum, pageSize)).getContent();
+        LocalDateTime now = LocalDateTime.now();
+        List<Actividad> actividades = actividadRepositorio.findByDiaHoraTerminoLessThanEqual(now, PageRequest.of(pageNum, pageSize)).getContent();
+        System.out.println("---------------Actividades---------------" + actividades);
         List<Map<String, String>> data = new ArrayList<>(pageSize);
 
-        for (Actividad actividad : actividades) {
+        actividades.forEach( actividad -> {
             Map<String, String> actividadData = new HashMap<>();
 
             actividadData.put("id", actividad.getId().toString());
@@ -37,7 +41,7 @@ public class AppService {
             actividadData.put("nota", actividad.averageNota().toString());
 
             data.add(actividadData);
-            }
+        });
         return data;
     }
 }
