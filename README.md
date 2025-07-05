@@ -1,5 +1,5 @@
-# desarrollo_web_oscar_garrido
-[http](https://github.com/OwOscarito/desarrollo_web_oscar_garrido/tree/Tarea_2o)
+# desarrollo_web_oscar_garrido - Tarea 4
+[http](https://github.com/OwOscarito/desarrollo_web_oscar_garrido/tree/Tarea_4)
 
 ## Base de datos
 Para correr el servidor web se requiere una base de datos mysql corriendo de forma local con:
@@ -7,6 +7,7 @@ Para correr el servidor web se requiere una base de datos mysql corriendo de for
 - Usuario = ```cc5002```
 - Contraseña = ```programacionweb```
 - Puerto: = ```3306```
+De todas formas esto puede editarse en el archivo ```application.properties```
 
 Se puede ejecutar en un contenedor con el archivo ```compose.yaml```:
 ```sh
@@ -68,4 +69,5 @@ Correr la aplicacion con:
 
 mvnw.cmd spring:boot:run #Windows
 ```
+Luego puede ser accedida desde: [127.0.0.1:8080](http://127.0.0.1:8080)
 
