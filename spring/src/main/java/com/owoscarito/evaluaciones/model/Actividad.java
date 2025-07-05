@@ -80,8 +80,8 @@ public class Actividad {
         for (Nota nota : notas) {
             total += nota.getNota();
         }
-        Double result = (total / notas.size());
-        return result.toString();
+        double result = total / notas.size();
+        return String.format("%.1f", result);
     }
 
     public String stringTemas() {

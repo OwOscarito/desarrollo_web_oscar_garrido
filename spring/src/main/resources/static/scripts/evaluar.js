@@ -1,4 +1,3 @@
-
 currentActivityId = null;
 
 function open_evaluation(element) {
@@ -26,7 +25,6 @@ function reload_grade(activityId) {
         .catch(error => console.error('Error:', error));
 }
 
-
 function send_evaluation() {
     const formData = new FormData();
 
@@ -49,16 +47,15 @@ function send_evaluation() {
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
-                console.log('Nota enviada exitosamente');
+                console.log('Grade sent successfully');
                 reload_grade(currentActivityId);
                 const evaluationDialog = document.getElementById('evaluation-dialog');
                 evaluationDialog.close();
             } else {
-                console.log('Error:', data.error || 'Error desconocido');
+                console.error('Error:', data.error || 'Unknown error');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            console.log('Error al enviar la nota');
         });
 }
