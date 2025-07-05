@@ -27,21 +27,22 @@ public class AppService {
         LocalDateTime now = LocalDateTime.now();
         List<Actividad> actividades = actividadRepositorio.findByDiaHoraTerminoLessThanEqual(now, PageRequest.of(pageNum, pageSize)).getContent();
         System.out.println("---------------Actividades---------------" + actividades);
-        List<Map<String, String>> data = new ArrayList<>(pageSize);
+        List<Map<String, String>> dataArray = new ArrayList<>(pageSize);
 
         actividades.forEach( actividad -> {
-            Map<String, String> actividadData = new HashMap<>();
+            System.out.println("---------------Actividad---------------" + actividad);
+            Map<String, String> data = new HashMap<>();
 
-            actividadData.put("id", actividad.getId().toString());
-            actividadData.put("sector", actividad.getSector());
-            actividadData.put("nombre", actividad.getNombre());
-            actividadData.put("inicio", actividad.getDiaHoraInicio().toString());
-            actividadData.put("termino", actividad.getDiaHoraTermino() != null ? actividad.getDiaHoraTermino().toString() : "-");
-            actividadData.put("temas", actividad.stringTemas());
-            actividadData.put("nota", actividad.averageNota().toString());
+            data.put("id", actividad.getId().toString());
+            data.put("sector", actividad.getSector());
+            data.put("nombre", actividad.getNombre());
+            data.put("inicio", actividad.getDiaHoraInicio().toString());
+            data.put("termino", actividad.getDiaHoraTermino() != null ? actividad.getDiaHoraTermino().toString() : "-");
+            data.put("temas", actividad.stringTemas());
+            data.put("nota", actividad.averageNota());
 
-            data.add(actividadData);
+            dataArray.add(data);
         });
-        return data;
+        return dataArray;
     }
 }

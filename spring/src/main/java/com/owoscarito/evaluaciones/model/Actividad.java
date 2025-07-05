@@ -72,15 +72,16 @@ public class Actividad {
         return diaHoraTermino;
     }
 
-    public Double averageNota() {
+    public String averageNota() {
         if (notas == null || notas.isEmpty()) {
-            return -1.0;
+            return "-";
         }
         double total = 0.0;
         for (Nota nota : notas) {
             total += nota.getNota();
         }
-        return total / notas.size();
+        Double result = (total / notas.size());
+        return result.toString();
     }
 
     public String stringTemas() {

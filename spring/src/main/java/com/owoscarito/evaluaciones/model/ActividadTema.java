@@ -23,7 +23,7 @@ public class ActividadTema {
     private Integer id;
 
     //@NotNull
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private Tema tema;
 
     @Column(name = "glosa_otro")
@@ -50,6 +50,7 @@ public class ActividadTema {
     }
 
     public String stringTema() {
+        System.out.println("ActividadTema.stringTema() tema: " + tema + ", glosaOtro: " + glosaOtro);
         if (tema == Tema.otro) {
             return glosaOtro;
         } else {

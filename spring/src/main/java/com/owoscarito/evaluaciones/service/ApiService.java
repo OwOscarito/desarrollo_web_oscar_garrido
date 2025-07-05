@@ -16,7 +16,7 @@ public class ApiService {
         this.actividadRepositorio = actividadRepositorio;
         this.notaRepositorio = notaRepositorio;
     }
-    public Double getNota(Integer id) {
+    public String getNota(Integer id) {
         return actividadRepositorio.findById(id)
             .orElseThrow(() -> new RuntimeException("Actividad not found"))
             .averageNota();

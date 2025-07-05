@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/base :: head">
     <title>Evaluar Actividades</title>
 </head>
@@ -21,14 +21,15 @@
                     <th>Evaluar</th>
                 </tr>
 
-                <tr th:each="actividad : ${data}" class="clickable">
+                <tr th:each="actividad : ${data}">
                     <td th:text="${actividad['id']}"></td>
                     <td th:text="${actividad['inicio']}"></td>
                     <td th:text="${actividad['termino']}"></td>
                     <td th:text="${actividad['sector']}"></td>
                     <td th:text="${actividad['nombre']}"></td>
-                    <td th:text="${actividad['notas']}"></td>
-                    <td> <button id="open-evaluation-button" th:onclick="'javascript:open_evaluation(' + ${actividad['id']} + ')'">Evaluar</button> </td>
+                    <td th:text="${actividad['temas']}"></td>
+                    <td th:id="'grade-'+ ${actividad['id']}" th:text="${actividad['nota']}"></td>
+                    <td> <button th:data-id="${actividad['id']}" th:onclick="'open_evaluation(this);'">Evaluar</button> </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(data)}">
                     <td colspan="8">

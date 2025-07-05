@@ -29,7 +29,7 @@ public class AppController {
     @GetMapping("/evaluar")
     public String evaluarRoute(Model model) {
         List<Map<String, String>> actividadesData = appService.getDataActividades(0,5);
-        System.out.println("------------------------Actividades Data: " + actividadesData);
+        System.out.println("------------------------Actividades Data: -----------------------" + actividadesData);
         model.addAttribute("data", actividadesData);
         return "evaluar";
     }
