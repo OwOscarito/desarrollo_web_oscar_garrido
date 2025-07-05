@@ -3,8 +3,9 @@ package com.owoscarito.evaluaciones.controller;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Map;
 
 import com.owoscarito.evaluaciones.service.AppService;
@@ -28,9 +29,18 @@ public class AppController {
 
     @GetMapping("/evaluar")
     public String evaluarRoute(Model model) {
-        List<Map<String, String>> actividadesData = appService.getDataActividades(0,5);
-        System.out.println("------------------------Actividades Data: -----------------------" + actividadesData);
-        model.addAttribute("data", actividadesData);
+        return evaluarByPageRoute(0, model);
+    }
+
+    @GetMapping("/evaluar/{page}")
+    public String evaluarByPageRoute(@PathVariable Integer page, Model model) {
+        Map<String, Object> result = appService.getDataActividades(page, 10);
+
+        model.addAttribute("page", result.get("currentPage"));
+        model.addAttribute("pageSize", result.get("pageSize"));
+        model.addAttribute("pageCount", result.get("totalPages"));
+        model.addAttribute("actividades", result.get("actividades"));
+        
         return "evaluar";
     }
 

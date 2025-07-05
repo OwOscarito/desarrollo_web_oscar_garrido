@@ -59,3 +59,10 @@ function send_evaluation() {
             console.error('Error:', error);
         });
 }
+
+
+window.onload = () => {
+  let MAX_PAGE = 5;
+  const container = document.getElementById("page-switcher-container");
+  container.appendChild(pageSwitcher(pageNum, MAX_PAGE));
+}

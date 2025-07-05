@@ -27,11 +27,16 @@ public class AppService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy\nHH:mm");
         return dateTime.format(formatter);
     }
-    public List<Map<String, String>> getDataActividades(Integer pageNum, Integer pageSize) {
+    public Map<String, Object> getDataActividades(Integer pageNum, Integer pageSize) {
         LocalDateTime now = LocalDateTime.now();
-        List<Actividad> actividades = actividadRepositorio.findByDiaHoraTerminoLessThanEqual(now, PageRequest.of(pageNum, pageSize)).getContent();
-        //System.out.println("---------------Actividades---------------" + actividades);
-        List<Map<String, String>> dataArray = new ArrayList<>(pageSize);
+        
+        // Get paginated data
+        var page = actividadRepositorio.findByDiaHoraTerminoLessThanEqual(now, PageRequest.of(pageNum, pageSize));
+        List<Actividad> actividades = page.getContent();
+        
+        int totalPages = page.getTotalPages();
+        
+        List<Map<String, String>> actividadesData = new ArrayList<>(pageSize);
 
         actividades.forEach( actividad -> {
             //System.out.println("---------------Actividad---------------" + actividad);
@@ -45,8 +50,15 @@ public class AppService {
             data.put("temas", actividad.stringTemas());
             data.put("nota", actividad.averageNota());
 
-            dataArray.add(data);
+            actividadesData.add(data);
         });
-        return dataArray;
+        
+        Map<String, Object> pageInfo = new HashMap<>();
+        pageInfo.put("currentPage", pageNum);
+        pageInfo.put("pageSize", pageSize);
+        pageInfo.put("totalPages", totalPages);
+        pageInfo.put("actividades", actividadesData);
+
+        return pageInfo;
     }
 }

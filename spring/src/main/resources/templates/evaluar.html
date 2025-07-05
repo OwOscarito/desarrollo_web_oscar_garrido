@@ -21,7 +21,7 @@
                     <th>Evaluar</th>
                 </tr>
 
-                <tr th:each="actividad : ${data}">
+                <tr th:each="actividad : ${actividades}">
                     <td th:text="${actividad['id']}"></td>
                     <td th:text="${actividad['inicio']}"></td>
                     <td th:text="${actividad['termino']}"></td>
@@ -38,6 +38,10 @@
             </table>
         </div>
 
+        <div class="hcenter" id="page-container" th:data-page="${page}" 
+            th:data-pageCount="${pageCount}" 
+            th:data-pageSize="${pageCount}">
+        </div>
         
         <dialog id="evaluation-dialog">
             <form id="evaluation-form">
