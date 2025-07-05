@@ -6,7 +6,9 @@ import com.owoscarito.evaluaciones.model.Nota;
 import com.owoscarito.evaluaciones.model.NotaRepositorio;
 import org.springframework.stereotype.Service;
 
-
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ApiService {
@@ -16,16 +18,38 @@ public class ApiService {
         this.actividadRepositorio = actividadRepositorio;
         this.notaRepositorio = notaRepositorio;
     }
-    public String getNota(Integer id) {
-        return actividadRepositorio.findById(id)
-            .orElseThrow(() -> new RuntimeException("Actividad not found"))
-            .averageNota();
+    public Map<String, String> getNota(Integer actividadId) {
+        Map<String, String> response = new HashMap<>();
+        Optional<Actividad> actividadOptional = actividadRepositorio.findById(actividadId);
+        
+        if (actividadOptional.isPresent()) {
+            Actividad a = actividadOptional.get();
+            response.put("status", "success");
+            response.put("nota", a.averageNota());
+        } else {
+            response.put("status", "fail");
+            response.put("error", "Actividad not found");
+        }
+        
+        return response;
     }
-    public String addNota(Integer actividadId, Integer nota) {
-        Actividad a = actividadRepositorio.findById(actividadId)
-                .orElseThrow(() -> new RuntimeException("Actividad not found"));
-        Nota n = new Nota(a, nota);
-        notaRepositorio.save(n);
-        return "Nota agregada correctamente";
+
+    public Map<String, String> addNota(Integer actividadId, Integer nota) {
+        Map<String, String> response = new HashMap<>();
+        
+        try {
+            Actividad a = actividadRepositorio.findById(actividadId)
+                    .orElseThrow(() -> new RuntimeException("Actividad not found"));
+            Nota n = new Nota(a, nota);
+            notaRepositorio.save(n);
+            
+            response.put("status", "success");
+            response.put("message", "Nota agregada correctamente");
+        } catch (RuntimeException e) {
+            response.put("status", "fail");
+            response.put("error", e.getMessage());
+        }
+        
+        return response;
     }
 }

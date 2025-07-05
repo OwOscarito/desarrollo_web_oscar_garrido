@@ -14,10 +14,10 @@ function open_evaluation(element) {
 
 function reload_grade(activityId) {
     const gradeElement = document.getElementById('grade-' + activityId);
-    fetch('/nota/' + activityId)
+    fetch('/api/nota/' + activityId)
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            if (data.status === 'success') {
                 gradeElement.textContent = data.nota;
             } else {
                 console.error('Error fetching grade:', data.error);
@@ -27,16 +27,38 @@ function reload_grade(activityId) {
 }
 
 
-function send_evaluation(evaluationForm) {
-    const formData = new FormData(evaluationForm);
-    formData.append('activityId', currentActivityId);
+function send_evaluation() {
+    const formData = new FormData();
+
+    const selectedGrade = document.querySelector('input[name="grade"]:checked');
     
-    return fetch(url, {
+    if (!selectedGrade) {
+        console.log('No grade selected');
+        return;
+    }
+    
+    console.log('Selected grade:', selectedGrade.value);
+    formData.append('actividad-id', currentActivityId);
+    formData.append('nota', selectedGrade.value);
+    
+    const url = '/api/nota/añadir';
+    fetch(url, {
         method: 'POST',
         body: formData
-    })
-    .then(response => response.json())
-    .then(data => true)
-    .catch(error => false);
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Nota enviada exitosamente');
+                reload_grade(currentActivityId);
+                const evaluationDialog = document.getElementById('evaluation-dialog');
+                evaluationDialog.close();
+            } else {
+                console.log('Error:', data.error || 'Error desconocido');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            console.log('Error al enviar la nota');
+        });
 }
-

@@ -3,6 +3,9 @@ package com.owoscarito.evaluaciones.controller;
 import com.owoscarito.evaluaciones.service.ApiService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api")
 public class ApiController {
@@ -13,18 +16,26 @@ public class ApiController {
     }
 
     @GetMapping("/nota/{id}")
-    public Double getNota(@PathVariable("id") Integer id) {
+    public Map<String, String> getNota(@PathVariable Integer id) {
         return apiService.getNota(id);
     }
 
-    @GetMapping("/nota/añadir")
-    public String addNota(@RequestParam("actividad-id") Integer actividadId,
-                          @RequestParam("nota") Integer nota) {
+    @PostMapping("/nota/añadir")
+    @ResponseBody
+    public Map<String, String> addNota(@RequestParam("actividad-id") Integer actividadId,
+                                       @RequestParam Integer nota) {
+        Map<String, String> response = new HashMap<>();
+        
         if (actividadId == null || nota == null) {
-            return "Error: actividad-id and nota are required.";
+            response.put("status", "fail");
+            response.put("error", "actividad-id and nota are required.");
+            return response;
         } else if (nota < 1 || nota > 7) {
-            return "Error: nota must be between 1 and 7.";
+            response.put("status", "fail");
+            response.put("error", "nota must be between 1 and 7.");
+            return response;
         }
+        
         return apiService.addNota(actividadId, nota);
     }
 }
